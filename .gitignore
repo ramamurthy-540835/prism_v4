@@ -1,0 +1,160 @@
+# Dependencies - catch node_modules everywhere
+node_modules/
+*/node_modules/
+*/*/node_modules/
+*/*/*/node_modules/
+*/*/*/*/node_modules/
+*/package-lock.json
+*/*/package-lock.json
+*/*/*/package-lock.json
+*/*/*/*/package-lock.json
+
+# Next.js build output
+.next/
+*/.next/
+frontend/.next/
+*/*/next/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+*.env
+.env.production.local
+.env.development.local
+.env.test.local
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage
+coverage/
+.coverage
+htmlcov/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+*.sublime-workspace
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+
+# Build outputs
+dist/
+build/
+out/
+*.tsbuildinfo
+.turbo/
+
+# Deployment
+.vercel/
+.netlify/
+
+# Misc
+.cache/
+.turbo/
+.next/
+out/
+*.bak
+*.tmp
+*.temp
+
+# Frontend specifics
+frontend/node_modules/
+frontend/.next/
+frontend/.env.local
+frontend/dist/
+frontend/build/
+frontend/coverage/
+frontend/.turbo/
+
+# Backend specifics
+backend/node_modules/
+backend/.env.local
+backend/dist/
+backend/build/
+backend/coverage/
+
+# OSSA submodule
+ossa/node_modules/
+ossa/.next/
+ossa/.env.local
+ossa/dist/
+ossa/build/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Secrets
+secrets/
+secretes/
+*.key
+*.pem
+private_key*
+credentials.json
+google_credentials.json
+service_account.json
+
+# Temp files
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+*~
+.vscode-settings.json
+.history
+
+# CI/CD
+.github/workflows/.cache/
+.gitlab-ci.yml.backup
+
+# Generated files
+*.generated.ts
+*.generated.js
+*.generated.tsx
+*.generated.jsx

@@ -1,0 +1,152 @@
+{
+  "Instruction-Based": {
+    "template": "Perform the following task: {task}",
+    "input_vars": [
+      "task"
+    ]
+  },
+  "Chain-of-Thought": {
+    "template": "Solve the problem step-by-step: {problem}",
+    "input_vars": [
+      "problem"
+    ]
+  },
+  "Zero-Shot": {
+    "template": "Answer the following question: {question}",
+    "input_vars": [
+      "question"
+    ]
+  },
+  "Few-Shot": {
+    "template": "Given examples, classify the following input: {input}",
+    "input_vars": [
+      "input"
+    ]
+  },
+  "Self-Consistency": {
+    "template": "Provide multiple reasoning paths and the best answer: {question}",
+    "input_vars": [
+      "question"
+    ]
+  },
+  "Tree-of-Thoughts": {
+    "template": "Explore options using tree-like reasoning for: {puzzle}",
+    "input_vars": [
+      "puzzle"
+    ]
+  },
+  "Graph-of-Thought": {
+    "template": "Connect concepts related to: {topic}",
+    "input_vars": [
+      "topic"
+    ]
+  },
+  "Skeleton-of-Thought": {
+    "template": "Outline your reasoning steps to solve: {task}",
+    "input_vars": [
+      "task"
+    ]
+  },
+  "Chain-of-Verification": {
+    "template": "Verify each step logically for: {argument}",
+    "input_vars": [
+      "argument"
+    ]
+  },
+  "ReAct": {
+    "template": "React to the input and decide next action: {situation}",
+    "input_vars": [
+      "situation"
+    ]
+  },
+  "Active-Prompt": {
+    "template": "Ask the user for clarification on: {task}",
+    "input_vars": [
+      "task"
+    ]
+  },
+  "Instruction Prompting and Tuning": {
+    "template": "Tune the following response using instructions: {response}",
+    "input_vars": [
+      "response"
+    ]
+  },
+  "Recursive Prompting": {
+    "template": "Build a sequence of prompts to solve: {complex_task}",
+    "input_vars": [
+      "complex_task"
+    ]
+  },
+  "Automatic Prompt Engineer (APE)": {
+    "template": "Suggest the best prompting strategy for: {goal}",
+    "input_vars": [
+      "goal"
+    ]
+  },
+  "Automatic Reasoning and Tool-use (ART)": {
+    "template": "Use tools to solve this: {tool_task}",
+    "input_vars": [
+      "tool_task"
+    ]
+  },
+  "Retrieval Augmented Generation (RAG)": {
+    "template": "Retrieve facts and answer this: {question}",
+    "input_vars": [
+      "question"
+    ]
+  },
+  "Chain-of-Note": {
+    "template": "Create notes from: {document}",
+    "input_vars": [
+      "document"
+    ]
+  },
+  "Chain-of-Knowledge": {
+    "template": "Incorporate knowledge and answer: {factual_query}",
+    "input_vars": [
+      "factual_query"
+    ]
+  },
+  "Chain-of-Code": {
+    "template": "Write and run code to solve: {problem}",
+    "input_vars": [
+      "problem"
+    ]
+  },
+  "Chain-of-Symbol": {
+    "template": "Navigate the symbolic space to: {spatial_task}",
+    "input_vars": [
+      "spatial_task"
+    ]
+  },
+  "Structured Chain-of-Thought": {
+    "template": "Use structured steps to solve: {program_task}",
+    "input_vars": [
+      "program_task"
+    ]
+  },
+  "Contrastive Chain-of-Thought": {
+    "template": "Show valid/invalid examples to reason: {input}",
+    "input_vars": [
+      "input"
+    ]
+  },
+  "Logical Chain-of-Thought": {
+    "template": "Apply logical reasoning to: {logic_problem}",
+    "input_vars": [
+      "logic_problem"
+    ]
+  },
+  "System 2 Attention Prompting": {
+    "template": "Refocus and extract main points from: {text}",
+    "input_vars": [
+      "text"
+    ]
+  },
+  "Emotion Prompting": {
+    "template": "Add emotional intelligence and respond to: {emotion_query}",
+    "input_vars": [
+      "emotion_query"
+    ]
+  }
+}

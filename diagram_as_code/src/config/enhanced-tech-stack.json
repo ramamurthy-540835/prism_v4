@@ -1,0 +1,718 @@
+{
+  "frontend": [
+    {
+      "id": "react",
+      "label": "React",
+      "description": "Modern UI library for building interactive interfaces",
+      "fallbackIcon": "⚛️",
+      "category": "frontend",
+      "popularity": 95,
+      "complexity": "medium",
+      "compatibility": {
+        "nextjs": 0.95,
+        "typescript": 0.9,
+        "nodejs": 0.85,
+        "graphql": 0.8
+      },
+      "useCases": ["SPA", "Component Libraries", "Progressive Web Apps"],
+      "learningCurve": "moderate",
+      "ecosystemSize": "large"
+    },
+    {
+      "id": "vue",
+      "label": "Vue.js", 
+      "description": "Progressive framework for building user interfaces",
+      "fallbackIcon": "🖖",
+      "category": "frontend",
+      "popularity": 85,
+      "complexity": "low",
+      "compatibility": {
+        "nuxt": 0.95,
+        "typescript": 0.8,
+        "nodejs": 0.8,
+        "pinia": 0.9
+      },
+      "useCases": ["SPA", "Progressive Enhancement", "Component-based Apps"],
+      "learningCurve": "easy",
+      "ecosystemSize": "medium"
+    },
+    {
+      "id": "angular",
+      "label": "Angular",
+      "description": "Platform for building mobile and desktop web applications",
+      "fallbackIcon": "🅰️", 
+      "category": "frontend",
+      "popularity": 75,
+      "complexity": "high",
+      "compatibility": {
+        "typescript": 0.95,
+        "ionic": 0.9,
+        "rxjs": 0.95,
+        "nodejs": 0.8
+      },
+      "useCases": ["Enterprise Apps", "Large-scale Applications", "Progressive Web Apps"],
+      "learningCurve": "steep",
+      "ecosystemSize": "large"
+    },
+    {
+      "id": "nextjs",
+      "label": "Next.js",
+      "description": "React framework with full-stack capabilities",
+      "fallbackIcon": "🔺",
+      "category": "frontend",
+      "popularity": 90,
+      "complexity": "medium",
+      "compatibility": {
+        "react": 0.95,
+        "vercel": 0.95,
+        "typescript": 0.9,
+        "tailwind": 0.85
+      },
+      "useCases": ["SSR", "Static Sites", "Full-stack Applications"],
+      "learningCurve": "moderate",
+      "ecosystemSize": "large"
+    },
+    {
+      "id": "svelte",
+      "label": "Svelte",
+      "description": "Compile-time framework with no virtual DOM",
+      "fallbackIcon": "🧡",
+      "category": "frontend", 
+      "popularity": 70,
+      "complexity": "low",
+      "compatibility": {
+        "sveltekit": 0.95,
+        "typescript": 0.8,
+        "vite": 0.9
+      },
+      "useCases": ["Lightweight Apps", "Performance-critical UIs", "Component Libraries"],
+      "learningCurve": "easy",
+      "ecosystemSize": "small"
+    },
+    {
+      "id": "flutter_web",
+      "label": "Flutter Web",
+      "description": "Cross-platform UI framework for web applications",
+      "fallbackIcon": "🦋",
+      "category": "frontend",
+      "popularity": 65,
+      "complexity": "medium",
+      "compatibility": {
+        "dart": 0.95,
+        "firebase": 0.8,
+        "flutter_mobile": 0.95
+      },
+      "useCases": ["Cross-platform Development", "Consistent UI", "Mobile-first Web"],
+      "learningCurve": "moderate",
+      "ecosystemSize": "growing"
+    }
+  ],
+  "backend": [
+    {
+      "id": "nodejs",
+      "label": "Node.js",
+      "description": "JavaScript runtime built on Chrome's V8 engine",
+      "fallbackIcon": "🟢",
+      "category": "backend",
+      "popularity": 90,
+      "complexity": "medium",
+      "compatibility": {
+        "express": 0.95,
+        "nestjs": 0.9,
+        "typescript": 0.9,
+        "mongodb": 0.85
+      },
+      "useCases": ["REST APIs", "Microservices", "Real-time Applications"],
+      "learningCurve": "moderate",
+      "ecosystemSize": "huge"
+    },
+    {
+      "id": "python",
+      "label": "Python",
+      "description": "High-level programming language with extensive libraries",
+      "fallbackIcon": "🐍",
+      "category": "backend",
+      "popularity": 95,
+      "complexity": "low",
+      "compatibility": {
+        "django": 0.95,
+        "fastapi": 0.9,
+        "flask": 0.9,
+        "postgresql": 0.85
+      },
+      "useCases": ["Web APIs", "Data Processing", "AI/ML Services"],
+      "learningCurve": "easy",
+      "ecosystemSize": "huge"
+    },
+    {
+      "id": "java",
+      "label": "Java",
+      "description": "Enterprise-grade object-oriented programming language",
+      "fallbackIcon": "☕",
+      "category": "backend",
+      "popularity": 85,
+      "complexity": "high",
+      "compatibility": {
+        "spring": 0.95,
+        "maven": 0.9,
+        "gradle": 0.9,
+        "oracle": 0.9
+      },
+      "useCases": ["Enterprise Applications", "Microservices", "High-performance Systems"],
+      "learningCurve": "steep", 
+      "ecosystemSize": "large"
+    },
+    {
+      "id": "dotnet",
+      "label": ".NET",
+      "description": "Microsoft's unified development platform",
+      "fallbackIcon": "🔷",
+      "category": "backend",
+      "popularity": 80,
+      "complexity": "medium",
+      "compatibility": {
+        "azure": 0.95,
+        "sqlserver": 0.95,
+        "csharp": 0.95,
+        "blazor": 0.9
+      },
+      "useCases": ["Enterprise APIs", "Windows Applications", "Cloud Services"],
+      "learningCurve": "moderate",
+      "ecosystemSize": "large"
+    },
+    {
+      "id": "golang",
+      "label": "Go",
+      "description": "Fast, simple, and efficient programming language",
+      "fallbackIcon": "🐹",
+      "category": "backend",
+      "popularity": 75,
+      "complexity": "low",
+      "compatibility": {
+        "gin": 0.9,
+        "docker": 0.95,
+        "kubernetes": 0.9,
+        "grpc": 0.95
+      },
+      "useCases": ["Microservices", "Cloud Native Apps", "High-performance APIs"],
+      "learningCurve": "easy",
+      "ecosystemSize": "growing"
+    },
+    {
+      "id": "rust",
+      "label": "Rust",
+      "description": "Systems programming language focused on safety and performance",
+      "fallbackIcon": "🦀",
+      "category": "backend",
+      "popularity": 65,
+      "complexity": "high",
+      "compatibility": {
+        "actix": 0.9,
+        "tokio": 0.9,
+        "wasm": 0.85
+      },
+      "useCases": ["System Services", "Performance-critical APIs", "WebAssembly"],
+      "learningCurve": "steep",
+      "ecosystemSize": "small"
+    }
+  ],
+  "database": [
+    {
+      "id": "postgresql",
+      "label": "PostgreSQL",
+      "description": "Advanced open source relational database",
+      "fallbackIcon": "🐘",
+      "category": "database",
+      "popularity": 90,
+      "complexity": "medium",
+      "compatibility": {
+        "python": 0.95,
+        "nodejs": 0.9,
+        "java": 0.9,
+        "prisma": 0.9
+      },
+      "useCases": ["OLTP", "Analytics", "JSON Storage", "Time Series"],
+      "learningCurve": "moderate",
+      "ecosystemSize": "large"
+    },
+    {
+      "id": "mongodb",
+      "label": "MongoDB", 
+      "description": "Document-oriented NoSQL database",
+      "fallbackIcon": "🍃",
+      "category": "database",
+      "popularity": 85,
+      "complexity": "low",
+      "compatibility": {
+        "nodejs": 0.95,
+        "python": 0.9,
+        "mongoose": 0.95,
+        "atlas": 0.95
+      },
+      "useCases": ["Document Storage", "Content Management", "Real-time Analytics"],
+      "learningCurve": "easy",
+      "ecosystemSize": "large"
+    },
+    {
+      "id": "redis",
+      "label": "Redis",
+      "description": "In-memory data structure store and cache",
+      "fallbackIcon": "🔴",
+      "category": "database",
+      "popularity": 80,
+      "complexity": "low",
+      "compatibility": {
+        "nodejs": 0.9,
+        "python": 0.9,
+        "java": 0.85,
+        "docker": 0.95
+      },
+      "useCases": ["Caching", "Session Store", "Message Broker", "Real-time Analytics"],
+      "learningCurve": "easy",
+      "ecosystemSize": "medium"
+    },
+    {
+      "id": "elasticsearch",
+      "label": "Elasticsearch",
+      "description": "Distributed search and analytics engine",
+      "fallbackIcon": "🔍",
+      "category": "database", 
+      "popularity": 75,
+      "complexity": "medium",
+      "compatibility": {
+        "kibana": 0.95,
+        "logstash": 0.95,
+        "java": 0.9,
+        "python": 0.85
+      },
+      "useCases": ["Full-text Search", "Log Analytics", "Application Monitoring"],
+      "learningCurve": "moderate",
+      "ecosystemSize": "medium"
+    },
+    {
+      "id": "cassandra",
+      "label": "Cassandra",
+      "description": "Distributed NoSQL database for big data",
+      "fallbackIcon": "📊",
+      "category": "database",
+      "popularity": 65,
+      "complexity": "high",
+      "compatibility": {
+        "java": 0.9,
+        "python": 0.8,
+        "spark": 0.85
+      },
+      "useCases": ["Big Data", "Time Series", "High Availability", "Write-heavy Workloads"],
+      "learningCurve": "steep",
+      "ecosystemSize": "medium"
+    },
+    {
+      "id": "snowflake",
+      "label": "Snowflake",
+      "description": "Cloud-native data warehouse platform",
+      "fallbackIcon": "❄️",
+      "category": "database",
+      "popularity": 70,
+      "complexity": "medium",
+      "compatibility": {
+        "python": 0.9,
+        "sql": 0.95,
+        "dbt": 0.95,
+        "tableau": 0.9
+      },
+      "useCases": ["Data Warehousing", "Analytics", "Data Lake", "Business Intelligence"],
+      "learningCurve": "moderate",
+      "ecosystemSize": "growing"
+    }
+  ],
+  "cloud": [
+    {
+      "id": "aws",
+      "label": "Amazon Web Services",
+      "description": "Comprehensive cloud computing platform",
+      "fallbackIcon": "☁️",
+      "category": "cloud",
+      "popularity": 95,
+      "complexity": "high",
+      "compatibility": {
+        "terraform": 0.95,
+        "kubernetes": 0.9,
+        "docker": 0.9,
+        "serverless": 0.95
+      },
+      "useCases": ["Infrastructure", "Serverless", "Container Orchestration", "AI/ML"],
+      "learningCurve": "steep",
+      "ecosystemSize": "huge"
+    },
+    {
+      "id": "azure",
+      "label": "Microsoft Azure",
+      "description": "Microsoft's cloud computing platform and services",
+      "fallbackIcon": "🔵",
+      "category": "cloud",
+      "popularity": 85,
+      "complexity": "high",
+      "compatibility": {
+        "dotnet": 0.95,
+        "terraform": 0.9,
+        "kubernetes": 0.9,
+        "office365": 0.95
+      },
+      "useCases": ["Enterprise Integration", "Hybrid Cloud", "AI Services", "DevOps"],
+      "learningCurve": "steep", 
+      "ecosystemSize": "large"
+    },
+    {
+      "id": "gcp",
+      "label": "Google Cloud Platform",
+      "description": "Google's suite of cloud computing services",
+      "fallbackIcon": "🌐",
+      "category": "cloud",
+      "popularity": 75,
+      "complexity": "high",
+      "compatibility": {
+        "kubernetes": 0.95,
+        "tensorflow": 0.95,
+        "python": 0.9,
+        "bigquery": 0.95
+      },
+      "useCases": ["Data Analytics", "Machine Learning", "Container Services", "Big Data"],
+      "learningCurve": "steep",
+      "ecosystemSize": "large"
+    },
+    {
+      "id": "docker",
+      "label": "Docker",
+      "description": "Platform for developing and running containerized applications",
+      "fallbackIcon": "🐳",
+      "category": "cloud",
+      "popularity": 90,
+      "complexity": "medium",
+      "compatibility": {
+        "kubernetes": 0.95,
+        "aws": 0.9,
+        "azure": 0.9,
+        "gcp": 0.9
+      },
+      "useCases": ["Containerization", "Microservices", "Development Environment", "CI/CD"],
+      "learningCurve": "moderate",
+      "ecosystemSize": "huge"
+    },
+    {
+      "id": "kubernetes",
+      "label": "Kubernetes",
+      "description": "Container orchestration platform for automated deployment",
+      "fallbackIcon": "⎈",
+      "category": "cloud",
+      "popularity": 85,
+      "complexity": "high",
+      "compatibility": {
+        "docker": 0.95,
+        "helm": 0.95,
+        "istio": 0.9,
+        "prometheus": 0.9
+      },
+      "useCases": ["Container Orchestration", "Microservices", "Auto-scaling", "Service Mesh"],
+      "learningCurve": "steep",
+      "ecosystemSize": "large"
+    },
+    {
+      "id": "serverless",
+      "label": "Serverless",
+      "description": "Event-driven computing without server management",
+      "fallbackIcon": "⚡",
+      "category": "cloud",
+      "popularity": 80,
+      "complexity": "medium",
+      "compatibility": {
+        "aws_lambda": 0.95,
+        "azure_functions": 0.9,
+        "vercel": 0.9,
+        "netlify": 0.85
+      },
+      "useCases": ["Event Processing", "API Functions", "Background Jobs", "Real-time Processing"],
+      "learningCurve": "moderate",
+      "ecosystemSize": "growing"
+    }
+  ],
+  "devops": [
+    {
+      "id": "terraform",
+      "label": "Terraform",
+      "description": "Infrastructure as code for cloud resource management",
+      "fallbackIcon": "🏗️",
+      "category": "devops",
+      "popularity": 85,
+      "complexity": "medium",
+      "compatibility": {
+        "aws": 0.95,
+        "azure": 0.9,
+        "gcp": 0.9,
+        "kubernetes": 0.8
+      },
+      "useCases": ["Infrastructure as Code", "Multi-cloud Deployment", "Resource Management"],
+      "learningCurve": "moderate",
+      "ecosystemSize": "large"
+    },
+    {
+      "id": "jenkins",
+      "label": "Jenkins",
+      "description": "Open source automation server for CI/CD",
+      "fallbackIcon": "🔧",
+      "category": "devops",
+      "popularity": 80,
+      "complexity": "medium",
+      "compatibility": {
+        "docker": 0.9,
+        "kubernetes": 0.8,
+        "git": 0.95,
+        "ansible": 0.8
+      },
+      "useCases": ["Continuous Integration", "Deployment Automation", "Build Pipelines"],
+      "learningCurve": "moderate",
+      "ecosystemSize": "large"
+    },
+    {
+      "id": "gitlab_ci",
+      "label": "GitLab CI/CD",
+      "description": "Integrated DevOps platform with built-in CI/CD",
+      "fallbackIcon": "🦊",
+      "category": "devops",
+      "popularity": 75,
+      "complexity": "medium",
+      "compatibility": {
+        "docker": 0.95,
+        "kubernetes": 0.9,
+        "terraform": 0.8
+      },
+      "useCases": ["Source Control", "CI/CD Pipelines", "Container Registry", "Security Scanning"],
+      "learningCurve": "moderate",
+      "ecosystemSize": "growing"
+    },
+    {
+      "id": "ansible",
+      "label": "Ansible",
+      "description": "Automation platform for configuration management",
+      "fallbackIcon": "🎭",
+      "category": "devops",
+      "popularity": 70,
+      "complexity": "low",
+      "compatibility": {
+        "python": 0.9,
+        "terraform": 0.8,
+        "linux": 0.95
+      },
+      "useCases": ["Configuration Management", "Application Deployment", "Orchestration"],
+      "learningCurve": "easy",
+      "ecosystemSize": "medium"
+    },
+    {
+      "id": "prometheus",
+      "label": "Prometheus",
+      "description": "Monitoring and alerting toolkit for reliability",
+      "fallbackIcon": "📊",
+      "category": "devops",
+      "popularity": 75,
+      "complexity": "medium",
+      "compatibility": {
+        "grafana": 0.95,
+        "kubernetes": 0.9,
+        "docker": 0.85
+      },
+      "useCases": ["System Monitoring", "Metrics Collection", "Alerting", "Observability"],
+      "learningCurve": "moderate",
+      "ecosystemSize": "growing"
+    },
+    {
+      "id": "grafana",
+      "label": "Grafana",
+      "description": "Analytics and monitoring solution with rich visualizations",
+      "fallbackIcon": "📈",
+      "category": "devops",
+      "popularity": 80,
+      "complexity": "low",
+      "compatibility": {
+        "prometheus": 0.95,
+        "elasticsearch": 0.9,
+        "influxdb": 0.9
+      },
+      "useCases": ["Data Visualization", "Dashboards", "Monitoring", "Analytics"],
+      "learningCurve": "easy",
+      "ecosystemSize": "medium"
+    }
+  ],
+  "ai_ml": [
+    {
+      "id": "tensorflow",
+      "label": "TensorFlow",
+      "description": "End-to-end machine learning platform",
+      "fallbackIcon": "🧠",
+      "category": "ai_ml",
+      "popularity": 90,
+      "complexity": "high",
+      "compatibility": {
+        "python": 0.95,
+        "kubernetes": 0.8,
+        "gcp": 0.95
+      },
+      "useCases": ["Deep Learning", "Neural Networks", "Computer Vision", "NLP"],
+      "learningCurve": "steep",
+      "ecosystemSize": "huge"
+    },
+    {
+      "id": "pytorch",
+      "label": "PyTorch",
+      "description": "Dynamic neural network framework for research and production",
+      "fallbackIcon": "🔥",
+      "category": "ai_ml",
+      "popularity": 85,
+      "complexity": "high",
+      "compatibility": {
+        "python": 0.95,
+        "cuda": 0.9,
+        "fastapi": 0.8
+      },
+      "useCases": ["Research", "Computer Vision", "Natural Language Processing", "Reinforcement Learning"],
+      "learningCurve": "steep",
+      "ecosystemSize": "large"
+    },
+    {
+      "id": "huggingface",
+      "label": "Hugging Face",
+      "description": "Platform for natural language processing and transformers",
+      "fallbackIcon": "🤗",
+      "category": "ai_ml",
+      "popularity": 80,
+      "complexity": "medium",
+      "compatibility": {
+        "pytorch": 0.95,
+        "tensorflow": 0.9,
+        "python": 0.95
+      },
+      "useCases": ["NLP Models", "Text Generation", "Sentiment Analysis", "Translation"],
+      "learningCurve": "moderate",
+      "ecosystemSize": "growing"
+    },
+    {
+      "id": "mlflow",
+      "label": "MLflow",
+      "description": "Platform for the machine learning lifecycle",
+      "fallbackIcon": "🔄",
+      "category": "ai_ml",
+      "popularity": 70,
+      "complexity": "medium",
+      "compatibility": {
+        "python": 0.95,
+        "tensorflow": 0.9,
+        "pytorch": 0.9
+      },
+      "useCases": ["Experiment Tracking", "Model Registry", "Model Deployment", "MLOps"],
+      "learningCurve": "moderate",
+      "ecosystemSize": "growing"
+    },
+    {
+      "id": "openai",
+      "label": "OpenAI API",
+      "description": "AI models and services via API",
+      "fallbackIcon": "🎯",
+      "category": "ai_ml",
+      "popularity": 85,
+      "complexity": "low",
+      "compatibility": {
+        "python": 0.95,
+        "nodejs": 0.9,
+        "rest_api": 0.95
+      },
+      "useCases": ["Text Generation", "Code Generation", "Embeddings", "Fine-tuning"],
+      "learningCurve": "easy",
+      "ecosystemSize": "medium"
+    },
+    {
+      "id": "langchain",
+      "label": "LangChain",
+      "description": "Framework for developing applications with language models",
+      "fallbackIcon": "⛓️",
+      "category": "ai_ml",
+      "popularity": 75,
+      "complexity": "medium",
+      "compatibility": {
+        "openai": 0.95,
+        "python": 0.95,
+        "pinecone": 0.8
+      },
+      "useCases": ["LLM Applications", "RAG Systems", "Agents", "Chatbots"],
+      "learningCurve": "moderate",
+      "ecosystemSize": "rapidly growing"
+    }
+  ],
+  "mobile": [
+    {
+      "id": "react_native",
+      "label": "React Native",
+      "description": "Cross-platform mobile development with React",
+      "fallbackIcon": "📱",
+      "category": "mobile",
+      "popularity": 85,
+      "complexity": "medium",
+      "compatibility": {
+        "react": 0.95,
+        "expo": 0.9,
+        "typescript": 0.9
+      },
+      "useCases": ["Cross-platform Apps", "Native Performance", "Code Sharing"],
+      "learningCurve": "moderate",
+      "ecosystemSize": "large"
+    },
+    {
+      "id": "flutter",
+      "label": "Flutter",
+      "description": "Google's UI toolkit for cross-platform applications",
+      "fallbackIcon": "🦋",
+      "category": "mobile",
+      "popularity": 80,
+      "complexity": "medium",
+      "compatibility": {
+        "dart": 0.95,
+        "firebase": 0.9,
+        "android": 0.95
+      },
+      "useCases": ["Cross-platform Development", "High Performance UI", "Single Codebase"],
+      "learningCurve": "moderate",
+      "ecosystemSize": "growing"
+    },
+    {
+      "id": "swift",
+      "label": "Swift",
+      "description": "Apple's programming language for iOS development",
+      "fallbackIcon": "🍎",
+      "category": "mobile",
+      "popularity": 75,
+      "complexity": "medium",
+      "compatibility": {
+        "ios": 0.95,
+        "xcode": 0.95,
+        "swiftui": 0.9
+      },
+      "useCases": ["iOS Apps", "macOS Development", "Native Performance"],
+      "learningCurve": "moderate",
+      "ecosystemSize": "medium"
+    },
+    {
+      "id": "kotlin",
+      "label": "Kotlin",
+      "description": "Modern programming language for Android development",
+      "fallbackIcon": "🤖",
+      "category": "mobile",
+      "popularity": 70,
+      "complexity": "medium",
+      "compatibility": {
+        "android": 0.95,
+        "java": 0.9,
+        "jetpack": 0.95
+      },
+      "useCases": ["Android Apps", "Cross-platform", "Server-side Development"],
+      "learningCurve": "moderate",
+      "ecosystemSize": "growing"
+    }
+  ]
+}

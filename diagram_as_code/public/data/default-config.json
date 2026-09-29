@@ -1,0 +1,127 @@
+{
+  "title": "Healthcare Data Quality Engine",
+  "subtitle": "AI-Powered Agentic Data Validation System",
+  "grid": {
+    "rows": 6,
+    "cols": 4,
+    "cellWidth": 300,
+    "cellHeight": 140,
+    "gap": 30
+  },
+  "components": {
+    "A1": {
+      "id": "data_source",
+      "title": "Raw Healthcare Dataset",
+      "description": "Patient records, demographics, medical history",
+      "icon": "database",
+      "color": "blue",
+      "details": [
+        "📊 1000+ patient records",
+        "🏥 Multiple data sources", 
+        "⚠️ Quality issues present"
+      ],
+      "connections": ["A2"]
+    },
+    "A2": {
+      "id": "dq_rules",
+      "title": "DQ Rules Engine",
+      "description": "30+ validation rules",
+      "icon": "shield",
+      "color": "green",
+      "details": [
+        "✅ Format validation",
+        "📏 Range checks",
+        "🔍 Pattern matching"
+      ],
+      "connections": ["B2"]
+    },
+    "B2": {
+      "id": "training_data",
+      "title": "Training Data Generation",
+      "description": "Annotated examples",
+      "icon": "file-text",
+      "color": "yellow",
+      "details": [
+        "📝 Input-output pairs",
+        "🎯 DQ annotations",
+        "📊 JSON structured"
+      ],
+      "connections": ["A3"]
+    },
+    "A3": {
+      "id": "ai_model",
+      "title": "AI Model Fine-tuning",
+      "description": "Large Language Model",
+      "icon": "brain",
+      "color": "purple",
+      "details": [
+        "Context: 2048 tokens",
+        "Parameters: 1.3B",
+        "Training: JSON-focused"
+      ],
+      "connections": ["A4", "B4"]
+    },
+    "A4": {
+      "id": "api_server",
+      "title": "REST API Server",
+      "description": "Real-time validation service",
+      "icon": "server",
+      "color": "orange",
+      "details": [
+        "🌐 HTTP endpoints",
+        "⚡ Sub-200ms response",
+        "🔄 1000+ req/min"
+      ],
+      "connections": ["B4"]
+    },
+    "B4": {
+      "id": "agentic_ai",
+      "title": "Agentic AI",
+      "description": "Autonomous validation agent",
+      "icon": "zap",
+      "color": "indigo",
+      "details": [
+        "🤖 Self-managing",
+        "🧠 Context-aware",
+        "📈 Adaptive learning"
+      ],
+      "connections": ["A5"]
+    },
+    "A5": {
+      "id": "analytics",
+      "title": "Results & Analytics", 
+      "description": "Quality metrics and insights",
+      "icon": "globe",
+      "color": "red",
+      "details": [
+        "📊 Quality scores",
+        "🎯 Rule analysis",
+        "📈 Trend analytics"
+      ],
+      "connections": []
+    }
+  },
+  "styles": {
+    "blue": {"bg": "from-blue-500 to-blue-600", "border": "border-blue-400", "text": "text-white"},
+    "green": {"bg": "from-green-500 to-green-600", "border": "border-green-400", "text": "text-white"},
+    "yellow": {"bg": "from-yellow-500 to-yellow-600", "border": "border-yellow-400", "text": "text-white"},
+    "purple": {"bg": "from-purple-500 to-purple-600", "border": "border-purple-400", "text": "text-white"},
+    "orange": {"bg": "from-orange-500 to-orange-600", "border": "border-orange-400", "text": "text-white"},
+    "indigo": {"bg": "from-indigo-500 to-indigo-600", "border": "border-indigo-400", "text": "text-white"},
+    "red": {"bg": "from-red-500 to-red-600", "border": "border-red-400", "text": "text-white"}
+  },
+  "genai_models": [
+    {
+      "id": "phi3",
+      "name": "Phi-3 Mini",
+      "endpoint": "http://10.100.15.67:12139/v1/chat/completions",
+      "description": "Fast general-purpose model"
+    },
+    {
+      "id": "deepseek",
+      "name": "DeepSeek Coder", 
+      "endpoint": "http://10.100.15.67:1137/v1/chat/completions",
+      "description": "Specialized for coding tasks"
+    }
+  ]
+}

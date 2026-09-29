@@ -1,0 +1,28 @@
+﻿:root {
+  --ibm-primary: #0f62fe;
+  --ibm-secondary: #4589ff;
+  --ibm-bg: #f8faff;
+  --ibm-panel: #ffffff;
+  --ibm-soft: #f4f7fb;
+  --ibm-border: #dcdcdc;
+  --ibm-text: #161616;
+  --ibm-text-muted: #525252;
+  --ibm-nav-bg: #ffffff;
+  --ibm-header-bg: #ffffff;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body { background: var(--ibm-bg); color: var(--ibm-text); margin: 0; padding: 0; }
+
+.ibm-page { background: var(--ibm-bg); color: var(--ibm-text); }
+.ibm-panel { background: var(--ibm-panel); border: 1px solid var(--ibm-border); border-radius: 10px; }
+.ibm-kpi { background: var(--ibm-panel); border: 1px solid var(--ibm-border); border-radius: 10px; box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
+.ibm-kpi-accent { height: 4px; background: var(--ibm-primary); border-top-left-radius: 10px; border-top-right-radius: 10px; }
+.ibm-label { color: var(--ibm-text-muted); font-size: 12px; text-transform: uppercase; letter-spacing: .04em; }
+.ibm-title { color: var(--ibm-text); }
+.ibm-btn-primary { background: var(--ibm-primary); color: white; border-radius: 8px; cursor: pointer; }
+.ibm-btn-secondary { background: white; color: var(--ibm-primary); border: 1px solid var(--ibm-secondary); border-radius: 8px; cursor: pointer; }
+.ibm-btn-ghost { background: transparent; color: var(--ibm-text-muted); border: 1px solid var(--ibm-border); border-radius: 8px; cursor: pointer; }
+.ibm-nav-link { color: var(--ibm-text-muted); text-decoration: none; font-size: 14px; padding: 0 4px 4px; border-bottom: 2px solid transparent; transition: color 0.15s, border-color 0.15s; }
+.ibm-nav-link:hover { color: var(--ibm-text); }
+.ibm-nav-link-active { color: var(--ibm-primary); border-bottom-color: var(--ibm-primary); }

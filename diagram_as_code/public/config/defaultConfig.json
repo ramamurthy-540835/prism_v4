@@ -1,0 +1,232 @@
+{
+  "title": "Healthcare Data Quality Engine",
+  "subtitle": "AI-Powered Agentic Data Validation System",
+  "metadata": {
+    "created": "2024-01-15T10:30:00Z",
+    "modified": "2024-01-15T14:45:00Z",
+    "version": "1.0.0",
+    "author": "Architecture Generator",
+    "description": "Healthcare data validation system with AI-powered quality engine",
+    "tags": ["healthcare", "data-quality", "ai", "validation"]
+  },
+  "grid": {
+    "rows": 6,
+    "cols": 4,
+    "cellWidth": 280,
+    "cellHeight": 120,
+    "gap": 20
+  },
+  "arrow_types": {
+    "single": {
+      "color": "#3b82f6",
+      "strokeWidth": 2,
+      "dashArray": "none",
+      "label": "→ Single",
+      "icon": "arrow-right"
+    },
+    "bidirectional": {
+      "color": "#10b981", 
+      "strokeWidth": 2,
+      "dashArray": "none",
+      "label": "↔ Bi-directional",
+      "icon": "arrow-left-right"
+    },
+    "oneToMany": {
+      "color": "#f59e0b",
+      "strokeWidth": 3,
+      "dashArray": "5,5", 
+      "label": "⟲ One to Many",
+      "icon": "git-branch"
+    },
+    "dataFlow": {
+      "color": "#8b5cf6",
+      "strokeWidth": 2,
+      "dashArray": "10,5",
+      "label": "⟿ Data Flow",
+      "icon": "workflow"
+    }
+  },
+  "components": {
+    "A1": {
+      "id": "data_source",
+      "title": "Raw Healthcare Dataset",
+      "description": "Patient records, demographics, medical history",
+      "icon": "database",
+      "color": "blue",
+      "shape": "rectangle",
+      "width": 280,
+      "height": 120,
+      "details": ["📊 1000+ patient records", "🏥 Multiple data sources", "⚠️ Quality issues present"],
+      "connections": [
+        {
+          "to": "A2",
+          "type": "single",
+          "label": "Raw Data"
+        }
+      ]
+    },
+    "A2": {
+      "id": "dq_rules",
+      "title": "DQ Rules Engine",
+      "description": "30+ validation rules",
+      "icon": "shield",
+      "color": "green",
+      "shape": "rectangle",
+      "width": 280,
+      "height": 120,
+      "details": ["✅ Format validation", "📏 Range checks", "🔍 Pattern matching"],
+      "connections": [
+        {
+          "to": "B2", 
+          "type": "bidirectional",
+          "label": "Rules & Feedback"
+        }
+      ]
+    },
+    "B2": {
+      "id": "training_data",
+      "title": "Training Data Generation",
+      "description": "Annotated examples",
+      "icon": "file-text",
+      "color": "yellow",
+      "shape": "rectangle",
+      "width": 280,
+      "height": 120,
+      "details": ["📝 Input-output pairs", "🎯 DQ annotations", "📊 JSON structured"],
+      "connections": [
+        {
+          "to": "A3",
+          "type": "dataFlow",
+          "label": "Training Sets"
+        }
+      ]
+    },
+    "A3": {
+      "id": "ai_model",
+      "title": "AI Model Fine-tuning",
+      "description": "Large Language Model (EleutherAI/gpt-neo-1.3B)",
+      "icon": "brain",
+      "color": "purple",
+      "shape": "circle",
+      "width": 280,
+      "height": 280,
+      "details": ["Context: 2048 tokens", "Parameters: 1.3B", "Training: JSON-focused", "Output: 9k+ tokens"],
+      "connections": [
+        {
+          "to": "A4",
+          "type": "single", 
+          "label": "Model API"
+        },
+        {
+          "to": "B4",
+          "type": "oneToMany",
+          "label": "AI Services"
+        }
+      ]
+    },
+    "A4": {
+      "id": "api_server",
+      "title": "REST API Server",
+      "description": "Real-time validation service",
+      "icon": "server",
+      "color": "orange",
+      "shape": "square",
+      "width": 200,
+      "height": 200,
+      "details": ["🌐 HTTP endpoints", "⚡ Sub-200ms response", "🔄 1000+ req/min"],
+      "connections": [
+        {
+          "to": "B4",
+          "type": "dataFlow",
+          "label": "Stream Data"
+        }
+      ]
+    },
+    "B4": {
+      "id": "agentic_ai",
+      "title": "Agentic AI",
+      "description": "Autonomous validation agent",
+      "icon": "zap",
+      "color": "indigo",
+      "shape": "oval",
+      "width": 250,
+      "height": 150,
+      "details": ["🤖 Self-managing", "🧠 Context-aware", "📈 Adaptive learning"],
+      "connections": [
+        {
+          "to": "A5",
+          "type": "single",
+          "label": "Results"
+        }
+      ]
+    },
+    "A5": {
+      "id": "analytics",
+      "title": "Validation Results & Analytics",
+      "description": "Detailed quality metrics and insights",
+      "icon": "globe",
+      "color": "red",
+      "shape": "rectangle",
+      "width": 280,
+      "height": 120,
+      "details": ["📊 Quality scores", "🎯 Rule-by-rule analysis", "📈 Trend analytics"],
+      "connections": []
+    }
+  },
+  "styles": {
+    "blue": { "bg": "#3B82F6", "border": "#60A5FA", "text": "#FFFFFF" },
+    "green": { "bg": "#10B981", "border": "#34D399", "text": "#FFFFFF" },
+    "yellow": { "bg": "#F59E0B", "border": "#FBBF24", "text": "#FFFFFF" },
+    "purple": { "bg": "#8B5CF6", "border": "#A78BFA", "text": "#FFFFFF" },
+    "orange": { "bg": "#F97316", "border": "#FB923C", "text": "#FFFFFF" },
+    "indigo": { "bg": "#6366F1", "border": "#818CF8", "text": "#FFFFFF" },
+    "red": { "bg": "#EF4444", "border": "#F87171", "text": "#FFFFFF" },
+    "pink": { "bg": "#EC4899", "border": "#F472B6", "text": "#FFFFFF" },
+    "cyan": { "bg": "#06B6D4", "border": "#22D3EE", "text": "#FFFFFF" }
+  },
+  "genai_models": [
+    {
+      "id": "phi3",
+      "name": "Phi-3 Mini",
+      "endpoint": "http://10.100.15.67:12139/v1/chat/completions",
+      "description": "Fast general-purpose model"
+    },
+    {
+      "id": "deepseek",
+      "name": "DeepSeek Coder",
+      "endpoint": "http://10.100.15.67:1137/v1/chat/completions",
+      "description": "Specialized for coding tasks"
+    },
+    {
+      "id": "mistral",
+      "name": "Mistral 7B",
+      "endpoint": "http://10.100.15.67:12143/v1/chat/completions",
+      "description": "Balanced performance model"
+    },
+    {
+      "id": "codellama",
+      "name": "Code Llama",
+      "endpoint": "http://10.100.15.67:12142/v1/chat/completions",
+      "description": "Code-specialized model"
+    },
+    {
+      "id": "deepseek_r1",
+      "name": "DeepSeek R1",
+      "endpoint": "http://10.100.15.67:12141/v1/chat/completions",
+      "description": "Advanced reasoning model"
+    },
+    {
+      "id": "sqlcoder",
+      "name": "SQL Coder",
+      "endpoint": "http://10.100.15.67:1138/v1/chat/completions",
+      "description": "SQL-specialized model"
+    }
+  ],
+  "export_settings": {
+    "include_metadata": true,
+    "include_stats": true,
+    "include_connections_array": true,
+    "format_version": "2.0",
+    "compression": false
+  }
+}

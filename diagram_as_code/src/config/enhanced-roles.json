@@ -1,0 +1,202 @@
+[
+  {
+    "id": "solution_architect",
+    "label": "Solution Architect",
+    "icon": "🏗️",
+    "focus": "End-to-end system design",
+    "description": "Designs comprehensive system architectures with scalability and integration focus",
+    "responsibilities": [
+      "Define overall system architecture and design patterns",
+      "Ensure scalability, performance, and reliability requirements",
+      "Technology selection and integration strategy planning",
+      "Security architecture and compliance framework design",
+      "Create technical documentation and architecture standards",
+      "Cross-functional team coordination and technical leadership"
+    ],
+    "deliverables": [
+      "System architecture diagrams and documentation",
+      "Technology stack recommendations and roadmaps",
+      "Integration patterns and API specifications",
+      "Security and compliance architecture framework",
+      "Performance and scalability design guidelines",
+      "Technical risk assessment and mitigation strategies"
+    ],
+    "expertise": ["System Design", "Integration Patterns", "Scalability", "Security", "Cloud Architecture"],
+    "toolsUsed": ["Enterprise Architect", "Visio", "Lucidchart", "Draw.io", "Confluence"]
+  },
+  {
+    "id": "devops_engineer", 
+    "label": "DevOps Engineer",
+    "icon": "⚙️",
+    "focus": "Infrastructure and deployment",
+    "description": "Focuses on deployment, operations, and infrastructure automation",
+    "responsibilities": [
+      "Design and implement CI/CD pipelines and automation",
+      "Infrastructure as Code (IaC) development and management",
+      "Container orchestration and microservices deployment",
+      "System monitoring, logging, and observability setup",
+      "Security automation and compliance implementation",
+      "Disaster recovery and backup strategy execution"
+    ],
+    "deliverables": [
+      "CI/CD pipeline configurations and automation scripts",
+      "Infrastructure automation templates and deployments",
+      "Monitoring and alerting system configurations",
+      "Security scanning and compliance automation",
+      "Disaster recovery procedures and runbooks",
+      "Performance optimization and cost management reports"
+    ],
+    "expertise": ["CI/CD", "Infrastructure as Code", "Containerization", "Monitoring", "Cloud Platforms"],
+    "toolsUsed": ["Jenkins", "GitLab CI", "Terraform", "Ansible", "Docker", "Kubernetes", "Prometheus"]
+  },
+  {
+    "id": "data_architect",
+    "label": "Data Architect", 
+    "icon": "📊",
+    "focus": "Data flow and analytics",
+    "description": "Specializes in data architecture, analytics, and information management",
+    "responsibilities": [
+      "Design data architecture and modeling strategies",
+      "Implement data pipelines and ETL/ELT processes",
+      "Establish data governance and quality frameworks",
+      "Design data warehouse and lake solutions",
+      "Analytics platform architecture and optimization",
+      "Data security and privacy compliance implementation"
+    ],
+    "deliverables": [
+      "Data architecture blueprints and data models",
+      "ETL/ELT pipeline documentation and implementations",
+      "Data governance policies and quality metrics",
+      "Analytics platform design and performance reports",
+      "Data lineage and metadata management systems",
+      "Data security and privacy compliance frameworks"
+    ],
+    "expertise": ["Data Modeling", "ETL/ELT", "Data Warehousing", "Analytics", "Big Data"],
+    "toolsUsed": ["Snowflake", "Databricks", "Apache Spark", "dbt", "Tableau", "Power BI"]
+  },
+  {
+    "id": "security_engineer",
+    "label": "Security Engineer",
+    "icon": "🔒", 
+    "focus": "Security and compliance",
+    "description": "Ensures security architecture and regulatory compliance across systems",
+    "responsibilities": [
+      "Design and implement security architecture and controls",
+      "Conduct threat modeling and security risk assessments", 
+      "Implement compliance frameworks and audit procedures",
+      "Design authentication, authorization, and identity management",
+      "Security monitoring, incident response, and forensics",
+      "Security automation and vulnerability management"
+    ],
+    "deliverables": [
+      "Security architecture documentation and threat models",
+      "Compliance audit reports and remediation plans",
+      "Identity and access management system designs",
+      "Security monitoring and incident response procedures",
+      "Vulnerability assessment and penetration testing reports",
+      "Security automation scripts and policy implementations"
+    ],
+    "expertise": ["Security Architecture", "Threat Modeling", "Compliance", "Identity Management", "Incident Response"],
+    "toolsUsed": ["SIEM Tools", "Vulnerability Scanners", "Identity Providers", "Security Frameworks"]
+  },
+  {
+    "id": "cloud_architect",
+    "label": "Cloud Architect",
+    "icon": "☁️",
+    "focus": "Cloud infrastructure and services",
+    "description": "Designs cloud-native architectures with multi-cloud strategies",
+    "responsibilities": [
+      "Design cloud infrastructure and migration strategies",
+      "Implement cloud-native application architectures",
+      "Optimize cloud costs and resource utilization",
+      "Design disaster recovery and business continuity",
+      "Implement cloud security and governance frameworks",
+      "Multi-cloud and hybrid cloud strategy development"
+    ],
+    "deliverables": [
+      "Cloud architecture designs and migration roadmaps",
+      "Cloud-native application blueprints and patterns",
+      "Cost optimization reports and recommendations",
+      "Disaster recovery and backup strategies",
+      "Cloud security and governance frameworks",
+      "Multi-cloud integration and management solutions"
+    ],
+    "expertise": ["Cloud Platforms", "Microservices", "Serverless", "Cost Optimization", "Cloud Security"],
+    "toolsUsed": ["AWS", "Azure", "GCP", "Terraform", "CloudFormation", "Cloud Cost Tools"]
+  },
+  {
+    "id": "ai_ml_engineer",
+    "label": "AI/ML Engineer", 
+    "icon": "🤖",
+    "focus": "Artificial intelligence and machine learning",
+    "description": "Develops AI/ML systems with focus on model deployment and MLOps",
+    "responsibilities": [
+      "Design machine learning pipelines and model architectures",
+      "Implement MLOps practices for model lifecycle management",
+      "Develop AI/ML infrastructure and deployment strategies",
+      "Data preprocessing and feature engineering optimization",
+      "Model monitoring, evaluation, and continuous improvement",
+      "AI ethics, bias detection, and explainability implementation"
+    ],
+    "deliverables": [
+      "ML pipeline architectures and model specifications",
+      "MLOps infrastructure and deployment automation",
+      "Model performance reports and optimization recommendations",
+      "Data preprocessing and feature engineering pipelines",
+      "Model monitoring and alerting system configurations",
+      "AI governance and ethics compliance frameworks"
+    ],
+    "expertise": ["Machine Learning", "Deep Learning", "MLOps", "Model Deployment", "AI Ethics"],
+    "toolsUsed": ["TensorFlow", "PyTorch", "MLflow", "Kubeflow", "SageMaker", "Databricks"]
+  },
+  {
+    "id": "mobile_architect",
+    "label": "Mobile Architect",
+    "icon": "📱",
+    "focus": "Mobile application architecture",
+    "description": "Designs mobile-first architectures with cross-platform strategies",
+    "responsibilities": [
+      "Design mobile application architectures and frameworks",
+      "Implement cross-platform development strategies",
+      "Mobile security and performance optimization",
+      "Mobile DevOps and app store deployment automation",
+      "Offline-first and progressive web app architectures",
+      "Mobile analytics and user experience optimization"
+    ],
+    "deliverables": [
+      "Mobile architecture patterns and framework designs",
+      "Cross-platform development guidelines and standards",
+      "Mobile security implementation and testing procedures",
+      "Mobile CI/CD pipeline configurations and automation",
+      "Progressive web app and offline-first architectures",
+      "Mobile analytics and performance monitoring setups"
+    ],
+    "expertise": ["Mobile Development", "Cross-Platform", "Mobile Security", "Performance", "UX/UI"],
+    "toolsUsed": ["React Native", "Flutter", "Xamarin", "Swift", "Kotlin", "Mobile Testing Tools"]
+  },
+  {
+    "id": "integration_architect",
+    "label": "Integration Architect",
+    "icon": "🔄",
+    "focus": "System integration and APIs",
+    "description": "Specializes in enterprise integration patterns and API management",
+    "responsibilities": [
+      "Design enterprise integration architectures and patterns",
+      "Implement API management and microservices strategies",
+      "Event-driven architecture and messaging system design",
+      "Legacy system integration and modernization planning",
+      "B2B integration and partner connectivity solutions",
+      "Integration monitoring and performance optimization"
+    ],
+    "deliverables": [
+      "Integration architecture blueprints and pattern libraries",
+      "API design specifications and management strategies",
+      "Event-driven architecture and messaging configurations",
+      "Legacy modernization roadmaps and integration plans",
+      "B2B integration specifications and partner onboarding",
+      "Integration monitoring and performance dashboards"
+    ],
+    "expertise": ["Enterprise Integration", "API Management", "Event-Driven Architecture", "Messaging", "Legacy Modernization"],
+    "toolsUsed": ["MuleSoft", "Apache Kafka", "API Gateways", "ESB Platforms", "Integration Tools"]
+  }
+]

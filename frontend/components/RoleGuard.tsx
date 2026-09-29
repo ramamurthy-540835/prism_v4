@@ -1,0 +1,1 @@
+import { ReactNode } from "react"; export default function RoleGuard({role,children}:{role:string;children:ReactNode}){if(role!=="admin") return <div className="text-red-300">Access denied</div>; return <>{children}</>}

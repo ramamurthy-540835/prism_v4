@@ -1,0 +1,10 @@
+-- Check the structure of any table
+SELECT column_name, data_type
+FROM `ctoteam.course_tracker.INFORMATION_SCHEMA.COLUMNS`
+ORDER BY table_name, ordinal_position;
+
+
+
+-- See all datasets in your project
+SELECT schema_name
+FROM `ctoteam.INFORMATION_SCHEMA.SCHEMATA`;

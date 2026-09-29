@@ -1,0 +1,1 @@
+export default function ModelSelector({value,onChange,options}:{value:string;onChange:(v:string)=>void;options:string[]}){return <select value={value} onChange={e=>onChange(e.target.value)} className="bg-slate-900 border border-slate-700 rounded-xl p-2">{options.map(o=><option key={o}>{o}</option>)}</select>}
