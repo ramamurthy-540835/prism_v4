@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Shield, GitBranch, BookOpen, Code2, Building2, FlaskConical, CheckSquare, BarChart, Brain, GraduationCap, BookMarked } from "lucide-react";
+import { Shield, GitBranch, BookOpen, Code2, Building2, FlaskConical, CheckSquare, BarChart, Brain, GraduationCap, BookMarked, ReceiptIndianRupee } from "lucide-react";
 import TopNav from "@/components/TopNav";
 
 const PERSONAS = [
@@ -79,6 +79,10 @@ export default function Home() {
                   className="inline-block rounded border border-[#dcdcdc] bg-white px-5 py-2.5 text-sm font-semibold text-[#525252]">
                   Test Governed AI Call
                 </Link>
+                <Link href="/solutions/gst-invoice-exceptions"
+                  className="inline-block rounded border border-[#24a148] bg-white px-5 py-2.5 text-sm font-semibold text-[#16803a]">
+                  GST Invoice Exception Agent
+                </Link>
               </div>
             </div>
 
@@ -140,6 +144,15 @@ export default function Home() {
                 <p className="mt-2 text-[14px] text-[#525252] leading-relaxed">{body}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="border-b border-[#dcdcdc] bg-white">
+        <div className="mx-auto max-w-7xl px-8 py-10">
+          <div className="flex flex-col justify-between gap-5 rounded-[10px] border border-[#b8dfc5] bg-[#f3fbf5] p-6 md:flex-row md:items-center">
+            <div className="flex gap-4"><div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-[#24a148] text-white"><ReceiptIndianRupee size={22} /></div><div><p className="text-[16px] font-semibold text-[#161616]">GST invoice exception resolution</p><p className="mt-1 max-w-2xl text-[14px] text-[#525252]">A governed ADK use case for investigating GST/PO/receipt mismatches with read-only tools and escalation for material variance.</p></div></div>
+            <Link href="/solutions/gst-invoice-exceptions" className="shrink-0 rounded bg-[#24a148] px-4 py-2 text-sm font-semibold text-white">Explore the use case</Link>
           </div>
         </div>
       </section>

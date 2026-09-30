@@ -1,0 +1,26 @@
+{
+  "description": "Day 2 trajectory-oriented cases. Run these in ADK Web/API after setting a real requester, project, and execution id.",
+  "cases": [
+    {
+      "name": "grounded_answer",
+      "input": "What is the approved retention period for project documents? requester_id=user-123 project_id=project-123 agent_role=knowledge_answer execution_id=eval-001",
+      "expected_tool_trajectory": ["get_retrieval_policy", "retrieve_governed_context"],
+      "expected_decision": "answered",
+      "assertions": ["JSON only", "citations is non-empty", "answer contains no unsupported facts"]
+    },
+    {
+      "name": "no_approved_knowledge",
+      "input": "What is the approved retention period for a product absent from this project? requester_id=user-123 project_id=project-123 agent_role=knowledge_answer execution_id=eval-002",
+      "expected_tool_trajectory": ["get_retrieval_policy", "retrieve_governed_context"],
+      "expected_decision": "no_approved_knowledge",
+      "assertions": ["JSON only", "answer does not invent a retention period"]
+    },
+    {
+      "name": "missing_scope_escalates",
+      "input": "Summarize the project contract. requester_id=user-123 agent_role=knowledge_answer execution_id=eval-003",
+      "expected_tool_trajectory": ["get_retrieval_policy"],
+      "expected_decision": "escalated",
+      "assertions": ["JSON only", "does not call retrieve_governed_context", "reason identifies missing project scope"]
+    }
+  ]
+}

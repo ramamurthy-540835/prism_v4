@@ -115,6 +115,7 @@ const PLANS: PlanDef[] = [
     ctaLabel: "Start Developer Plan",
     ctaColor: "white",
     ctaBg: "#0f62fe",
+    ctaHref: "https://rzp.io/rzp/CWbxTDSf",
   },
   {
     id: "team",
@@ -144,6 +145,7 @@ const PLANS: PlanDef[] = [
     ctaLabel: "Start Team Trial",
     ctaColor: "white",
     ctaBg: "#0f62fe",
+    ctaHref: "https://rzp.io/rzp/CWbxTDSf",
   },
   {
     id: "business",
@@ -171,6 +173,7 @@ const PLANS: PlanDef[] = [
     ctaLabel: "Start Business Trial",
     ctaColor: "white",
     ctaBg: "#e8a000",
+    ctaHref: "https://rzp.io/rzp/CWbxTDSf",
   },
   {
     id: "enterprise",
@@ -450,6 +453,8 @@ export default function PricingPage() {
                     {plan.ctaHref ? (
                       <a
                         href={plan.ctaHref}
+                        target={plan.ctaHref.startsWith("http") ? "_blank" : undefined}
+                        rel={plan.ctaHref.startsWith("http") ? "noreferrer" : undefined}
                         style={{
                           display: "block", width: "100%", padding: "11px 0", borderRadius: 6,
                           fontSize: 13, fontWeight: 600, cursor: "pointer", textAlign: "center",

@@ -1,0 +1,2 @@
+export async function diagramGenerate({ prompt }: { prompt: string }) { return { ok: false, message: `Diagram generation is not wired in this runtime. Request recorded: ${prompt.slice(0, 120)}` }; }
+export async function gitAutomate({ repo_url }: { repo_url: string; github_token?: string }) { return { ok: false, message: `Git automation is intentionally disabled until an approved GitHub App integration is configured for ${repo_url}.` }; }
