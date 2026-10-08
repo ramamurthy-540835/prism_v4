@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { env } from "@backend/lib/env";
 import { queryBigQuery, insertUsage } from "@backend/lib/bigquery";
-import { ossaGuard } from "@backend/lib/ossa";
+import { ossaGuard, safetyViolation } from "@backend/lib/ossa";
 import { callModel, resolveModel } from "@backend/lib/models";
 
 export async function POST(req: Request) {
@@ -9,7 +9,7 @@ export async function POST(req: Request) {
     const body = await req.json();
     const {
       userId = "anonymous",
-      orgId = "default",
+      orgId = "naturelabs",
       role = "viewer",
       persona = "",
       taskType = "general",
@@ -40,7 +40,7 @@ export async function POST(req: Request) {
     const estimatedCostUsd = estimatedTokens * 0.000002;
 
     // 3. OSSA guard
-    const ossaResult = await ossaGuard({ userId, orgId, estimatedTokens, estimatedCostUsd });
+    const ossaResult = await ossaGuard({ userId, orgId, estimatedTokens, estimatedCostUsd, userMessage });
 
     // 4. If stop → 403
     if (ossaResult.decision === "stop") {
@@ -66,6 +66,13 @@ export async function POST(req: Request) {
       userMessage,
       maxTokens: maxTokens ?? route.maxTokens,
     });
+
+    const outputViolation = safetyViolation(modelResult.responseText || "");
+    if (outputViolation) {
+      await insertUsage({ userId, orgId, role, persona, taskType, planId, provider: modelResult.provider,
+        modelId: modelResult.modelId, status: "blocked", reason: `safety_violation: ${outputViolation}` });
+      return NextResponse.json({ ossaDecision: "stop", reason: outputViolation }, { status: 403 });
+    }
 
     // 7. Log usage to BigQuery
     await insertUsage({

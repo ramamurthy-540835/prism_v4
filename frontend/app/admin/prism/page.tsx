@@ -64,8 +64,6 @@ function tierMeta(planId: string) {
 
 function vsCompetitor(planId: string): string {
   const id = String(planId ?? "").toLowerCase();
-  if (id.includes("community"))  return "free (Copilot Free: 2K completions)";
-  if (id.includes("student"))    return "free (Copilot student pack)";
   if (id.includes("developer"))  return "$1 below Copilot Pro ($10)";
   if (id.includes("starter"))    return "$1 below Copilot Pro ($10)";
   if (id.includes("team"))       return "$4 below Copilot Business ($19)";
@@ -415,7 +413,7 @@ export default function AdminPage() {
                   <div style={{ fontSize: 26, fontWeight: 600, color: blockedCount > 0 ? "#da1e28" : "#161616" }}>
                     {blockedCount}
                   </div>
-                  <div style={{ fontSize: 12, color: "#8d8d8d", marginTop: 2 }}>OSSA hard stops</div>
+                  <div style={{ fontSize: 12, color: "#8d8d8d", marginTop: 2 }}>Safety policy blocks</div>
                 </div>
               </div>
             </div>
@@ -724,7 +722,7 @@ export default function AdminPage() {
                   <table style={{ width: "100%", borderCollapse: "collapse" }}>
                     <thead>
                       <tr>
-                        {["Budget ID", "Org", "User", "Daily Token Limit", "Monthly Token Limit", "Daily Spend Cap", "Monthly Spend Cap", "Hard Stop", "Alert Threshold"].map((h) => (
+                        {["Budget ID", "Org", "User", "Daily Token Warning", "Monthly Token Warning", "Daily Spend Warning", "Monthly Spend Warning", "Safety Stop", "Alert Threshold"].map((h) => (
                           <Th key={h}>{h}</Th>
                         ))}
                       </tr>

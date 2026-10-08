@@ -88,7 +88,7 @@ export async function POST(req: Request) {
 
     const route = await getRoute({ orgId: body.orgId, planId: body.planId, taskType: body.taskType });
     const estimatedInputTokens = estimateTokens(`${systemPrompt ?? ""}\n${body.userMessage ?? ""}`);
-    const ossa = await ossaGuard({ orgId: body.orgId, userId: body.userId, estimatedTokens: estimatedInputTokens, estimatedCostUsd: route.costPerInputToken * estimatedInputTokens });
+    const ossa = await ossaGuard({ orgId: body.orgId, userId: body.userId, estimatedTokens: estimatedInputTokens, estimatedCostUsd: route.costPerInputToken * estimatedInputTokens, userMessage: body.userMessage });
 
     if (route.routingDecision === "blocked" || ossa.decision === "stop") {
       await insertUsage({ ...body, systemPrompt, provider: route.provider, model_id: route.modelId, decision: route.routingDecision, status: "blocked", reason: `${route.reason}; ${ossa.reason}` });
