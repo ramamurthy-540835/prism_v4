@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { env } from "@backend/lib/env";
+import { ensureSeeded } from "@backend/lib/bootstrap";
 
 export const dynamic = "force-dynamic";
 import { queryBigQuery } from "@backend/lib/bigquery";
@@ -14,8 +15,9 @@ export async function GET() {
   }
 
   try {
+    await ensureSeeded();
     const rows = await queryBigQuery(
-      `SELECT * FROM \`${env.projectId}.${env.dataset}.${env.plansTable}\` ORDER BY planId`
+      `SELECT * FROM \`${env.projectId}.${env.dataset}.${env.plansTable}\` WHERE planId IN ('starter','team','enterprise') AND status='active' ORDER BY planId`
     );
     _plansCache = rows;
     _plansCachedAt = Date.now();

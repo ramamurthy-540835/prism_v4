@@ -643,7 +643,7 @@ export default function WorkbenchPage() {
                       4. Latency - {d.latencyMs ?? 0}ms
                     </li>
                     <li style={{ padding: "8px 12px", border: "1px solid #dcdcdc", borderRadius: "4px", background: "#f8faff", fontSize: "13px" }}>
-                      5. Logged to BigQuery
+                      5. Logged to governance store
                     </li>
                   </ol>
                 </div>

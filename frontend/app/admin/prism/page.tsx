@@ -12,6 +12,7 @@ import {
   Legend, ResponsiveContainer,
 } from "recharts";
 import AppSidebar from "@/components/workbench/AppSidebar";
+import { PERSONAS, PERSONA_NAMES } from "@/config/personas";
 
 // ── Constants ──────────────────────────────────────────────────────────────────
 
@@ -26,30 +27,7 @@ const CAT_STYLE: Record<string, { bg: string; color: string }> = {
   Emotional:   { bg: "#ffd6e8", color: "#9f1853" },
 };
 
-const PERSONA_META = [
-  { name: "Developer",        icon: Code2,          tasks: "6 task types" },
-  { name: "Architect",        icon: Network,         tasks: "5 task types" },
-  { name: "Tester",           icon: TestTube2,       tasks: "4 task types" },
-  { name: "QA",               icon: ClipboardCheck,  tasks: "4 task types" },
-  { name: "Business Analyst", icon: LineChartIcon,   tasks: "5 task types" },
-  { name: "AI Engineer",      icon: Bot,             tasks: "6 task types" },
-  { name: "Mentor",           icon: GraduationCap,   tasks: "4 task types" },
-  { name: "Student",          icon: BookOpen,        tasks: "3 task types" },
-];
-
-const SEED_SQL = `DELETE FROM \`ctoteam.prism.prism_plans\` WHERE 1=1;
-
-INSERT INTO \`ctoteam.prism.prism_plans\`
-  (planId, planName, monthlyPriceUsd, yearlyPriceUsd, maxUsers,
-   monthlyTokenLimit, monthlySpendLimitUsd, allowedModels,
-   maxTokensPerCall, isActive, createdAt)
-VALUES
-  ('community',  'Community',  0,  0,   1,   200000,    3,     '["gemini-2.0-flash"]',                                                2048,  TRUE, CURRENT_TIMESTAMP()),
-  ('student',    'Student',    0,  0,   1,   500000,    5,     '["gemini-2.0-flash","gemini-2.5-flash"]',                             4096,  TRUE, CURRENT_TIMESTAMP()),
-  ('developer',  'Developer',  9,  85,  1,   2000000,   40,    '["gemini-2.5-flash","gpt-4o-mini","claude-sonnet-4-6"]',              8192,  TRUE, CURRENT_TIMESTAMP()),
-  ('team',       'Team',       15, 144, 20,  10000000,  200,   '["gemini-2.5-flash","gpt-4o-mini","claude-sonnet-4-6"]',              8192,  TRUE, CURRENT_TIMESTAMP()),
-  ('business',   'Business',   29, 278, 100, 50000000,  800,   '["gpt-4o","claude-sonnet-4-6","gemini-2.5-flash","gemini-2.0-flash"]',16384, TRUE, CURRENT_TIMESTAMP()),
-  ('enterprise', 'Enterprise', 49, 470, 999, 999999999, 99999, '["gpt-4o","claude-sonnet-4-6","gemini-2.5-flash","gemini-2.0-flash"]',32768, TRUE, CURRENT_TIMESTAMP());`;
+const PERSONA_META = PERSONA_NAMES.map((name) => ({ name, icon: ({ Developer: Code2, Architect: Network, Tester: TestTube2, "Business Analyst": LineChartIcon, "AI Engineer": Bot, "Project Manager": ClipboardCheck, Sales: BookOpen } as const)[name], tasks: `${PERSONAS[name].tasks.length} task types` }));
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -208,7 +186,7 @@ function EmptyState({ icon: Icon, text, sub, linkHref, linkLabel }: {
 
 // ── Main Component ────────────────────────────────────────────────────────────
 
-const SAFE_SUMMARY = { total_spend: 0, total_tokens: 0, active_users: 0, blocked_calls: 0 };
+const SAFE_SUMMARY = { total_spend: null, governed_calls: 0, total_tokens: 0, active_users: 0, blocked_calls: 0 };
 
 export default function AdminPage() {
   const router = useRouter();
@@ -216,11 +194,9 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<any>({});
   const [health, setHealth] = useState<{ status: string; message?: string; tableCount?: number }>({ status: "loading" });
-  const [countdown, setCountdown] = useState(30);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
   const [expandedUsers, setExpandedUsers] = useState<Set<string>>(new Set());
   const [userDetailsMap, setUserDetailsMap] = useState<Record<string, any[]>>({});
-  const [copied, setCopied] = useState(false);
 
   const loadData = useCallback(async () => {
     setLoading(true);
@@ -260,17 +236,6 @@ export default function AdminPage() {
   }, []);
 
   useEffect(() => { loadData(); }, [loadData]);
-
-  // Auto-refresh countdown
-  useEffect(() => {
-    const tick = setInterval(() => {
-      setCountdown((prev) => {
-        if (prev <= 1) { loadData(); return 30; }
-        return prev - 1;
-      });
-    }, 1000);
-    return () => clearInterval(tick);
-  }, [loadData]);
 
   // ── Derived state ────────────────────────────────────────────────────────────
 
@@ -315,15 +280,7 @@ export default function AdminPage() {
   // ── Handlers ─────────────────────────────────────────────────────────────────
 
   const handleRefreshAll = () => {
-    setCountdown(30);
     loadData();
-  };
-
-  const handleCopySeed = () => {
-    navigator.clipboard.writeText(SEED_SQL).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    });
   };
 
   const toggleUserDetails = async (userId: string) => {
@@ -371,7 +328,6 @@ export default function AdminPage() {
             </button>
             <div style={{ fontSize: 12, color: "#525252", textAlign: "right" }}>
               {lastUpdated && <div>Updated: {fmtTime(lastUpdated)}</div>}
-              <div>Next refresh in: {countdown}s</div>
             </div>
           </div>
         </div>
@@ -379,17 +335,15 @@ export default function AdminPage() {
         {/* BigQuery status bar */}
         {health.status === "loading" ? (
           <div style={{ height: 40, background: "white", border: "1px solid #dcdcdc", borderRadius: 6, display: "flex", alignItems: "center", padding: "0 16px", fontSize: 13, color: "#525252", marginBottom: 20 }}>
-            Checking BigQuery connection…
+            Checking governance store…
           </div>
         ) : health.status === "ok" ? (
           <div style={{ height: 40, background: "#defbe6", border: "1px solid #24a148", borderRadius: 6, display: "flex", alignItems: "center", padding: "0 16px", fontSize: 13, color: "#0e6027", fontWeight: 500, gap: 6, marginBottom: 20 }}>
-            ● BigQuery connected — ctoteam.prism
-            {health.tableCount != null && ` · ${health.tableCount} tables`}
+            ● Governance store connected
           </div>
         ) : (
           <div style={{ background: "#fff1f1", border: "1px solid #da1e28", borderRadius: 6, display: "flex", flexWrap: "wrap", alignItems: "center", padding: "8px 16px", gap: 8, marginBottom: 20 }}>
-            <span style={{ fontSize: 13, fontWeight: 500, color: "#a2191f" }}>● BigQuery error — check GOOGLE_APPLICATION_CREDENTIALS</span>
-            {health.message && <span style={{ fontSize: 12, color: "#a2191f" }}>{health.message}</span>}
+            <span style={{ fontSize: 13, fontWeight: 500, color: "#a2191f" }}>● Governance store unavailable</span>
           </div>
         )}
 
@@ -411,9 +365,10 @@ export default function AdminPage() {
                     <span style={{ fontSize: 12, color: "#525252", fontWeight: 500 }}>Total Spend MTD</span>
                   </div>
                   <div style={{ fontSize: 26, fontWeight: 600, color: "#161616" }}>
-                    {fmtUsd(Number(summary.total_spend ?? summary.totalSpend ?? 0))}
+                    {Number(summary.governed_calls ?? 0) > 0 && summary.total_spend != null
+                      ? `₹${(Number(summary.total_spend) * Number(summary.display_rate_inr ?? 97.05)).toFixed(2)}` : "—"}
                   </div>
-                  <div style={{ fontSize: 12, color: "#8d8d8d", marginTop: 2 }}>month to date</div>
+                  <div style={{ fontSize: 12, color: "#8d8d8d", marginTop: 2 }}>{Number(summary.governed_calls ?? 0) > 0 ? `${fmtUsd(Number(summary.total_spend))} USD · estimated INR · month to date` : "No governed calls yet this month"}</div>
                 </div>
               </div>
 
@@ -515,7 +470,7 @@ export default function AdminPage() {
 
                 {/* Prompt Types */}
                 <Card>
-                  <SectionHeader title="Prompt Types in BigQuery" badge={promptTypes.length} />
+                  <SectionHeader title="Prompt Types" badge={promptTypes.length} />
                   {promptTypes.length === 0 ? (
                     <p style={{ fontSize: 13, color: "#8d8d8d" }}>No prompt types found in prism_prompt_types table.</p>
                   ) : (
@@ -554,29 +509,16 @@ export default function AdminPage() {
 
                 {/* Plans */}
                 <Card>
-                  <SectionHeader
-                    title="Plans Management"
-                    badge={plans.length}
-                    right={
-                      <button onClick={handleCopySeed} style={{
-                        background: "white", color: "#0f62fe", border: "1px solid #0f62fe",
-                        borderRadius: 6, padding: "6px 12px", fontSize: 12, cursor: "pointer",
-                        display: "flex", alignItems: "center", gap: 4,
-                      }}>
-                        {copied ? <Check size={12} /> : <Copy size={12} />}
-                        {copied ? "Copied!" : "Add Plan SQL"}
-                      </button>
-                    }
-                  />
+                  <SectionHeader title="Plans Management" badge={plans.length} />
                   {plans.length === 0 ? (
-                    <p style={{ fontSize: 13, color: "#8d8d8d" }}>No plans found. Click "Add Plan SQL" to copy seed SQL.</p>
+                    <p style={{ fontSize: 13, color: "#8d8d8d" }}>Plans will appear after setup completes.</p>
                   ) : (
                     <>
                       <div style={{ overflowX: "auto" }}>
                         <table style={{ width: "100%", borderCollapse: "collapse" }}>
                           <thead>
                             <tr>
-                              {["Tier", "Plan", "$/mo", "$/yr", "vs Competitor", "Tokens", "Models", "Users", "Status"].map((h) => (
+                              {["Tier", "Plan", "Monthly base", "Billing", "Tokens", "Status"].map((h) => (
                                 <Th key={h}>{h}</Th>
                               ))}
                             </tr>
@@ -584,7 +526,7 @@ export default function AdminPage() {
                           <tbody>
                             {plans.map((p: any, i: number) => {
                               const id       = String(p.planId ?? p.plan_id ?? p.id ?? i);
-                              const name     = String(p.planName ?? p.plan_name ?? p.plan ?? p.planId ?? "-");
+                              const name     = String(p.name ?? p.planName ?? p.plan_name ?? p.plan ?? p.planId ?? "-");
                               const monthly  = Number(p.monthlyPriceUsd ?? p.monthly_price_usd ?? p.price_per_month ?? 0);
                               const yearly   = Number(p.yearlyPriceUsd  ?? p.yearly_price_usd  ?? p.price_per_year  ?? 0);
                               const tokens   = Number(p.monthlyTokenLimit ?? p.monthly_token_limit ?? p.tokenLimit ?? 0);
@@ -607,21 +549,9 @@ export default function AdminPage() {
                                       <span style={{ marginLeft: 4, fontSize: 10, color: "#0f62fe" }}>★</span>
                                     )}
                                   </Td>
-                                  <Td>{monthly > 0 ? `$${monthly}` : "Free"}</Td>
-                                  <Td>{yearly  > 0 ? `$${yearly}`  : "Free"}</Td>
-                                  <Td style={{ fontSize: 11, color: "#525252", maxWidth: 160, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }} title={vs}>
-                                    {vs}
-                                  </Td>
+                                  <Td>{id === "starter" ? "₹199" : "Contact sales"}</Td>
+                                  <Td>Postpaid + usage</Td>
                                   <Td>{fmtTokens(tokens)}</Td>
-                                  <Td>
-                                    <span style={{
-                                      background: "#e8f0fe", color: "#0f62fe", borderRadius: 12,
-                                      fontSize: 11, padding: "2px 8px", cursor: "help",
-                                    }} title={models.join(", ")}>
-                                      {models.length} models
-                                    </span>
-                                  </Td>
-                                  <Td>{fmtUsers(maxU)}</Td>
                                   <Td>
                                     <Pill
                                       label={String(isActive) === "true" || isActive === 1 ? "Active" : "Inactive"}
@@ -635,15 +565,6 @@ export default function AdminPage() {
                           </tbody>
                         </table>
                       </div>
-                      {/* Market positioning */}
-                      <div style={{
-                        marginTop: 12, background: "#e8f0fe", border: "1px solid #0f62fe",
-                        borderRadius: 6, padding: "12px 14px", fontSize: 12, color: "#0043ce", lineHeight: 1.6,
-                      }}>
-                        <strong>Market positioning:</strong> PRISM Developer at $9 undercuts GitHub Copilot Pro ($10) while adding multi-model routing.
-                        PRISM Team at $15 undercuts Copilot Business ($19) and Windsurf Teams ($20).
-                        Our margin at Gemini 2.5 Flash rates (~$0.15/1M tokens): Developer plan covers ~13M tokens of API cost per user per month — well above the 2M limit.
-                      </div>
                     </>
                   )}
                 </Card>
@@ -652,7 +573,7 @@ export default function AdminPage() {
                 <Card>
                   <SectionHeader title="Active Routing Rules" badge={routing.length} />
                   {routing.length === 0 ? (
-                    <p style={{ fontSize: 13, color: "#8d8d8d" }}>No routing rules configured. Run seed-routing.ts script.</p>
+                    <p style={{ fontSize: 13, color: "#8d8d8d" }}>Routing rules will appear after setup completes.</p>
                   ) : (
                     <div style={{ overflowX: "auto" }}>
                       <table style={{ width: "100%", borderCollapse: "collapse" }}>
@@ -689,7 +610,7 @@ export default function AdminPage() {
 
               {/* Persona Workspace */}
               <Card>
-                <SectionHeader title="Persona Workspace" badge="8 personas" />
+                <SectionHeader title="Persona Workspace" badge={`${PERSONA_NAMES.length} personas`} />
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))", gap: 12 }}>
                   {PERSONA_META.map(({ name, icon: Icon, tasks }) => (
                     <div

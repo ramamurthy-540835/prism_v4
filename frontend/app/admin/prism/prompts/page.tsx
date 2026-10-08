@@ -113,7 +113,7 @@ export default function PromptsPage() {
         <main className="flex-1 bg-[#f8faff] p-6 space-y-4">
           <div className="ibm-panel p-5">
             <h1 className="text-xl font-semibold text-[#161616]">Prompt Library</h1>
-            <p className="text-sm text-[#525252] mt-1">Active system prompts seeded from knowledge files. Publish new prompts to BigQuery.</p>
+            <p className="text-sm text-[#525252] mt-1">Active system prompts. Publish new prompts to the library.</p>
           </div>
 
           {error && <div className="rounded border border-[#da1e28] bg-white p-3 text-sm text-[#da1e28]">{error}</div>}

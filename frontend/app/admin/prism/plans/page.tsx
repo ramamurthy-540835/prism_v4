@@ -27,7 +27,7 @@ export default function PlansPage() {
           <div className="ibm-panel p-5 flex items-center justify-between">
             <div>
               <h1 className="text-xl font-semibold text-[#161616]">Plans</h1>
-              <p className="text-sm text-[#525252] mt-1">Active plan catalog from BigQuery.</p>
+              <p className="text-sm text-[#525252] mt-1">Active postpaid plans.</p>
             </div>
           </div>
 

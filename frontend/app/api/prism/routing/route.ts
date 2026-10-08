@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { env } from "@backend/lib/env";
+import { ensureSeeded } from "@backend/lib/bootstrap";
 import { queryBigQuery } from "@backend/lib/bigquery";
 import { activeWhereClause, getActiveColumn } from "@backend/lib/schema";
 
@@ -13,8 +14,9 @@ export async function GET() {
   }
 
   try {
+    await ensureSeeded();
     const activeCol = await getActiveColumn(env.routingTable);
-    const rows = await queryBigQuery(`SELECT * FROM \`${env.projectId}.${env.dataset}.${env.routingTable}\` WHERE 1=1 ${activeWhereClause(activeCol)} ORDER BY plan_id, task_type`);
+    const rows = await queryBigQuery(`SELECT * FROM \`${env.projectId}.${env.dataset}.${env.routingTable}\` WHERE 1=1 ${activeWhereClause(activeCol)} ORDER BY planId, taskType`);
     _routingCache = rows;
     _routingCachedAt = Date.now();
     return NextResponse.json(rows);

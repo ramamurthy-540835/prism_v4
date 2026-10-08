@@ -27,7 +27,7 @@ export default function BudgetsPage() {
           <div className="ibm-panel p-5 flex items-center justify-between">
             <div>
               <h1 className="text-xl font-semibold text-[#161616]">OSSA Budgets</h1>
-              <p className="text-sm text-[#525252] mt-1">Active budget policies from BigQuery.</p>
+              <p className="text-sm text-[#525252] mt-1">Monthly warning thresholds for governed usage.</p>
             </div>
           </div>
 
@@ -35,7 +35,7 @@ export default function BudgetsPage() {
           {loading ? (
             <div className="ibm-panel p-6 text-[#525252] text-sm">Loading budgets...</div>
           ) : budgets.length === 0 ? (
-            <div className="ibm-panel p-6 text-[#525252] text-sm">No active budgets found in <code>prism_budgets</code>.</div>
+            <div className="ibm-panel p-6 text-[#525252] text-sm">No budget warnings configured.</div>
           ) : (
             <div className="ibm-panel p-0 overflow-auto">
               <table className="min-w-full text-sm">

@@ -14,7 +14,7 @@
         <span className="text-[#24a148]">✓</span> API call — <span className="font-mono text-xs">{data?.latencyMs ?? "N/A"}ms</span>
       </li>
       <li className="rounded border border-[#dcdcdc] bg-white px-3 py-2 text-[#161616]">
-        <span className="text-[#24a148]">✓</span> BigQuery logged — ctoteam.prism.prism_usage
+        <span className="text-[#24a148]">✓</span> Logged to governance store
       </li>
     </ol>
   );

@@ -17,7 +17,7 @@ const CAPABILITIES = [
   {
     icon: Shield,
     title: "OSSA Governance",
-    body: "Token budgets, spend limits, allow/warn/stop decisions logged to BigQuery in real time.",
+    body: "Usage warnings and safety decisions logged in the governance store in real time.",
   },
   {
     icon: GitBranch,
@@ -27,7 +27,7 @@ const CAPABILITIES = [
   {
     icon: BookOpen,
     title: "Governed Prompt Library",
-    body: "25 prompt engineering techniques — Chain-of-Thought, RAG, ReAct, Tree-of-Thoughts — version-controlled and BigQuery-backed.",
+    body: "25 prompt engineering techniques — Chain-of-Thought, RAG, ReAct, Tree-of-Thoughts — with version history.",
   },
 ];
 
