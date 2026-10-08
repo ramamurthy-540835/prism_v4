@@ -4,6 +4,8 @@ import WorkbenchHeader from "@/components/workbench/WorkbenchHeader";
 import AppSidebar from "@/components/workbench/AppSidebar";
 import { WORKBENCH_EXAMPLES } from "@/lib/workbenchExamples";
 import { resolveTemplate } from "@/lib/resolveTemplate";
+import { PERSONAS, PERSONA_NAMES, DEFAULT_PERSONA, isPersona, taskTokenDefault } from "@/config/personas";
+import promptCatalog from "../../../../../knowledge/prompt_types/Prompts_Types.json";
 import {
   Code2, Network, TestTube2, ClipboardCheck,
   FileText, Bot, GraduationCap, BookOpen,
@@ -26,27 +28,15 @@ type Options = {
   promptTypes: OptionPromptType[];
 };
 
-const FALLBACK_TASK_TYPES = [
-  "code_generation", "code_review", "architecture_design",
-  "test_generation", "gap_analysis", "requirements_analysis",
-  "diagram_generation", "mentoring", "learning_explanation"
-];
-
-const FALLBACK_PROMPT_TYPES = [
-  { promptTypeId: "PT001", name: "Instruction-Based", category: "Instruction", template: "Perform the following task: {task}", inputVars: ["task"], description: "Direct instructions to perform a specific task." },
-  { promptTypeId: "PT002", name: "Chain-of-Thought", category: "Reasoning", template: "Solve the problem step-by-step: {problem}", inputVars: ["problem"], description: "Step-by-step reasoning process for complex tasks." },
-  { promptTypeId: "PT006", name: "Tree-of-Thoughts", category: "Reasoning", template: "Explore options using tree-like reasoning for: {puzzle}", inputVars: ["puzzle"], description: "Organizes thoughts into a tree structure for exploring multiple paths." },
-  { promptTypeId: "PT009", name: "Chain-of-Verification", category: "Reasoning", template: "Verify each step logically for: {argument}", inputVars: ["argument"], description: "Verifies each step of reasoning before proceeding." },
-  { promptTypeId: "PT016", name: "Retrieval Augmented Generation (RAG)", category: "Retrieval", template: "Retrieve facts and answer this: {question}", inputVars: ["question"], description: "Augments responses with external knowledge retrieval." },
-  { promptTypeId: "PT019", name: "Chain-of-Code", category: "Agentic", template: "Write and run code to solve: {problem}", inputVars: ["problem"], description: "Integrates code execution within reasoning." },
-  { promptTypeId: "PT021", name: "Structured Chain-of-Thought", category: "Reasoning", template: "Use structured steps to solve: {program_task}", inputVars: ["program_task"], description: "Employs structured reasoning for code generation." },
-  { promptTypeId: "PT023", name: "Logical Chain-of-Thought", category: "Reasoning", template: "Apply logical reasoning to: {logic_problem}", inputVars: ["logic_problem"], description: "Incorporates logical principles into reasoning." },
-];
+const FALLBACK_PROMPT_TYPES = Object.entries(promptCatalog).map(([name, value], index) => ({
+  promptTypeId: `PT${String(index + 1).padStart(3, "0")}`,
+  name, category: "General", template: value.template, inputVars: value.input_vars, description: name,
+}));
 
 const EMPTY_OPTIONS: Options = {
   models: [],
-  taskTypes: FALLBACK_TASK_TYPES,
-  personas: ["Developer", "Architect", "Tester", "QA", "Business Analyst", "AI Engineer", "Mentor", "Student"],
+  taskTypes: PERSONA_NAMES.flatMap((name) => [...PERSONAS[name].tasks]),
+  personas: PERSONA_NAMES,
   promptTypes: FALLBACK_PROMPT_TYPES
 };
 
@@ -72,30 +62,32 @@ export default function WorkbenchPage() {
   const [copied, setCopied] = useState(false);
 
   const [form, setForm] = useState({
-    userId: "test@mastechdigital.com",
-    orgId: "mastech",
+    userId: "",
+    orgId: "naturelabs",
     role: "developer",
-    persona: "",
-    planId: "enterprise",
-    taskType: "",
-    promptTypeId: "",
+    persona: DEFAULT_PERSONA as string,
+    planId: "starter",
+    taskType: PERSONAS[DEFAULT_PERSONA].tasks[0] as string,
+    promptTypeId: PERSONAS[DEFAULT_PERSONA].primaryPromptType as string,
     systemPrompt: "",
     userMessage: "",
-    maxTokens: 1024,
-    requestedModelId: "gemini-2.5-flash"
+    maxTokens: taskTokenDefault(PERSONAS[DEFAULT_PERSONA].tasks[0]),
+    requestedModelId: ""
   });
 
   useEffect(() => {
     const personaFromUrl = new URLSearchParams(window.location.search).get("persona")?.trim();
 
     // Set initial form with defaults immediately
-    const selectedPersona = personaFromUrl && EMPTY_OPTIONS.personas.includes(personaFromUrl)
-      ? personaFromUrl
-      : EMPTY_OPTIONS.personas[0] ?? "Developer";
+    const remembered = window.localStorage.getItem("prism:last-persona") ?? "";
+    const selectedPersona = personaFromUrl && isPersona(personaFromUrl)
+      ? personaFromUrl : isPersona(remembered) ? remembered : DEFAULT_PERSONA;
     setForm((f) => ({
       ...f,
       persona: selectedPersona,
-      taskType: EMPTY_OPTIONS.taskTypes[0] ?? ""
+      taskType: PERSONAS[selectedPersona].tasks[0],
+      promptTypeId: PERSONAS[selectedPersona].primaryPromptType,
+      maxTokens: taskTokenDefault(PERSONAS[selectedPersona].tasks[0])
     }));
 
     fetch("/api/prism/options")
@@ -118,6 +110,16 @@ export default function WorkbenchPage() {
         setOptionsError(e instanceof Error ? e.message : "Failed to load options");
       });
   }, []);
+
+  const personaConfig = PERSONAS[isPersona(form.persona) ? form.persona : DEFAULT_PERSONA];
+  const personaPromptTypes = options.promptTypes.filter((pt) => (personaConfig.promptTypes as readonly string[]).includes(pt.promptTypeId));
+  const selectPersona = (persona: string) => {
+    if (!isPersona(persona)) return;
+    window.localStorage.setItem("prism:last-persona", persona);
+    const taskType = PERSONAS[persona].tasks[0];
+    setForm((f) => ({ ...f, persona, taskType, promptTypeId: PERSONAS[persona].primaryPromptType,
+      requestedModelId: "", maxTokens: taskTokenDefault(taskType), systemPrompt: "" }));
+  };
 
   const selectedPromptType = useMemo(
     () => options.promptTypes.find((pt) => pt.promptTypeId === form.promptTypeId),
@@ -149,9 +151,10 @@ export default function WorkbenchPage() {
       promptTypeId: ex.promptTypeId,
       userMessage: ex.userMessage,
       maxTokens: ex.maxTokens,
-      requestedModelId: ex.model || "gemini-2.5-flash",
+      requestedModelId: "",
       systemPrompt: resolved || f.systemPrompt
     }));
+    window.localStorage.setItem("prism:last-persona", ex.persona);
     setTimeout(() => {
       leftRef.current?.scrollTo({ top: 0, behavior: "smooth" });
     }, 0);
@@ -230,34 +233,31 @@ export default function WorkbenchPage() {
             padding: "24px"
           }} ref={leftRef}>
 
-            <div style={cardStyle}>
+            <div style={{ ...cardStyle, borderLeft: `4px solid ${personaConfig.color}` }}>
               <h2 style={{ fontSize: "14px", fontWeight: 600, margin: "0 0 16px 0", color: "#161616" }}>Configuration</h2>
-
-              {/* Task Type */}
-              <div style={{ marginBottom: "20px" }}>
-                <label style={labelStyle}>Task Type</label>
-                <select
-                  value={form.taskType}
-                  onChange={(e) => setForm((f) => ({ ...f, taskType: e.target.value, requestedModelId: "" }))}
-                  style={commonInputStyle as any}
-                >
-                  {options.taskTypes.map((t) => (
-                    <option key={t} value={t}>{t.replace(/_/g, " ")}</option>
-                  ))}
-                </select>
-              </div>
 
               {/* Persona */}
               <div style={{ marginBottom: "20px" }}>
                 <label style={labelStyle}>Persona</label>
                 <select
                   value={form.persona}
-                  onChange={(e) => setForm((f) => ({ ...f, persona: e.target.value }))}
+                  onChange={(e) => selectPersona(e.target.value)}
                   style={commonInputStyle as any}
                 >
-                  {options.personas.map((p) => (
+                  {PERSONA_NAMES.map((p) => (
                     <option key={p} value={p}>{p}</option>
                   ))}
+                </select>
+              </div>
+              <span style={{ display: "inline-block", background: personaConfig.color, color: "white", borderRadius: 12, padding: "3px 9px", marginBottom: 16, fontSize: 12 }}>{form.persona}</span>
+
+              {/* Task Type */}
+              <div style={{ marginBottom: "20px" }}>
+                <label style={labelStyle}>Task Type</label>
+                <select value={form.taskType}
+                  onChange={(e) => { const taskType = e.target.value; setForm((f) => ({ ...f, taskType, requestedModelId: "", maxTokens: taskTokenDefault(taskType) })); }}
+                  style={commonInputStyle as any}>
+                  {personaConfig.tasks.map((t) => <option key={t} value={t}>{t.replace(/_/g, " ")}</option>)}
                 </select>
               </div>
 
@@ -282,13 +282,32 @@ export default function WorkbenchPage() {
                   }}
                   style={commonInputStyle as any}
                 >
-                  <option value="">Any prompt type</option>
-                  {options.promptTypes.map((pt) => (
+                  {personaPromptTypes.map((pt) => (
                     <option key={pt.promptTypeId} value={pt.promptTypeId}>
                       {pt.promptTypeId} - {pt.name}
                     </option>
                   ))}
+                  <option value="">Any prompt type</option>
                 </select>
+              </div>
+
+              {/* Model */}
+              <div style={{ marginBottom: "20px" }}>
+                <label style={labelStyle}>Model</label>
+                <select value={form.requestedModelId}
+                  onChange={(e) => setForm((f) => ({ ...f, requestedModelId: e.target.value }))}
+                  style={commonInputStyle as any}>
+                  <option value="">Auto (from routing rules)</option>
+                  {filteredModels.map((m) => <option key={`${m.provider}:${m.modelId}`} value={m.modelId}>{m.modelId}</option>)}
+                </select>
+              </div>
+
+              {/* Max Tokens */}
+              <div style={{ marginBottom: "20px" }}>
+                <label style={labelStyle}>Max tokens: {form.maxTokens}</label>
+                <input type="range" min={256} max={8192} step={256} value={form.maxTokens}
+                  onChange={(e) => setForm((f) => ({ ...f, maxTokens: Number(e.target.value) }))}
+                  style={{ width: "100%" }} />
               </div>
 
               {/* System Prompt */}
@@ -372,38 +391,6 @@ export default function WorkbenchPage() {
                     resize: "vertical"
                   } as any}
                   placeholder="Enter your request..."
-                />
-              </div>
-
-              {/* Model */}
-              <div style={{ marginBottom: "20px" }}>
-                <label style={labelStyle}>Model</label>
-                <select
-                  value={form.requestedModelId || "gemini-2.5-flash"}
-                  onChange={(e) => setForm((f) => ({ ...f, requestedModelId: e.target.value }))}
-                  style={commonInputStyle as any}
-                >
-                  <option value="gemini-2.5-flash">Gemini 2.5 Flash (default)</option>
-                  <option value="">Auto (from routing rules)</option>
-                  {filteredModels.map((m) => (
-                    <option key={`${m.provider}:${m.modelId}`} value={m.modelId}>
-                      {m.modelId} [{m.provider}]
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Max Tokens */}
-              <div style={{ marginBottom: "20px" }}>
-                <label style={labelStyle}>Max Tokens: {form.maxTokens}</label>
-                <input
-                  type="range"
-                  min={256}
-                  max={8192}
-                  step={256}
-                  value={form.maxTokens}
-                  onChange={(e) => setForm((f) => ({ ...f, maxTokens: Number(e.target.value) }))}
-                  style={{ width: "100%" }}
                 />
               </div>
 
@@ -555,7 +542,7 @@ export default function WorkbenchPage() {
 
                 <div style={cardStyle}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
-                    <h3 style={{ fontSize: "14px", fontWeight: 600, margin: 0, color: "#161616" }}>Response</h3>
+                    <h3 style={{ fontSize: "14px", fontWeight: 600, margin: 0, color: "#161616" }}>Response <span style={{ background: personaConfig.color, color: "white", padding: "3px 8px", borderRadius: 12, fontSize: 11, marginLeft: 8 }}>{form.persona}</span></h3>
                     <div style={{ display: "flex", gap: "8px" }}>
                       <button
                         onClick={() => {

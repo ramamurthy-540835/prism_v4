@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import AppSidebar from "@/components/workbench/AppSidebar";
 import WorkbenchHeader from "@/components/workbench/WorkbenchHeader";
+import { PERSONAS, isPersona } from "@/config/personas";
 
 export default function AuditPage() {
   const [rows, setRows] = useState<any[]>([]);
@@ -72,7 +73,9 @@ export default function AuditPage() {
                     <tr key={i} className="border-b border-[#dcdcdc] hover:bg-[#f4f7fb]">
                       {columns.map((c) => (
                         <td key={c} className="px-3 py-2 whitespace-nowrap" style={{ color: c === "decision" ? decisionColor(String(row[c] ?? "")) : "#161616" }}>
-                          {String(row[c] ?? "—")}
+                          {c.toLowerCase() === "persona" && isPersona(String(row[c]))
+                            ? <span style={{ background: PERSONAS[row[c] as keyof typeof PERSONAS].color, color: "white", borderRadius: 12, padding: "3px 8px" }}>{row[c]}</span>
+                            : String(row[c] ?? "—")}
                         </td>
                       ))}
                     </tr>

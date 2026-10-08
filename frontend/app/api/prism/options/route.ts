@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { env } from "@backend/lib/env";
 import { queryBigQuery } from "@backend/lib/bigquery";
 import { getActiveColumn, activeWhereClause } from "@backend/lib/schema";
+import { PERSONA_NAMES } from "@/config/personas";
+import promptCatalog from "@/../knowledge/prompt_types/Prompts_Types.json";
 
 export const dynamic = "force-dynamic";
 
@@ -9,21 +11,14 @@ let _optionsCache: any = null;
 let _optionsCachedAt = 0;
 const OPTIONS_TTL = 5 * 60 * 1000;
 
-const FALLBACK_PERSONAS = [
-  "Developer", "Architect", "Tester", "QA",
-  "Business Analyst", "AI Engineer", "Mentor", "Student"
-];
-
-const FALLBACK_PROMPT_TYPES = [
-  { promptTypeId: "PT001", name: "Instruction-Based", category: "Instruction", template: "Perform the following task: {task}", inputVars: ["task"], description: "Direct instructions to perform a specific task." },
-  { promptTypeId: "PT002", name: "Chain-of-Thought", category: "Reasoning", template: "Solve the problem step-by-step: {problem}", inputVars: ["problem"], description: "Step-by-step reasoning process for complex tasks." },
-  { promptTypeId: "PT006", name: "Tree-of-Thoughts", category: "Reasoning", template: "Explore options using tree-like reasoning for: {puzzle}", inputVars: ["puzzle"], description: "Organizes thoughts into a tree structure for exploring multiple paths." },
-  { promptTypeId: "PT009", name: "Chain-of-Verification", category: "Reasoning", template: "Verify each step logically for: {argument}", inputVars: ["argument"], description: "Verifies each step of reasoning before proceeding." },
-  { promptTypeId: "PT016", name: "Retrieval Augmented Generation (RAG)", category: "Retrieval", template: "Retrieve facts and answer this: {question}", inputVars: ["question"], description: "Augments responses with external knowledge retrieval." },
-  { promptTypeId: "PT019", name: "Chain-of-Code", category: "Agentic", template: "Write and run code to solve: {problem}", inputVars: ["problem"], description: "Integrates code execution within reasoning." },
-  { promptTypeId: "PT021", name: "Structured Chain-of-Thought", category: "Reasoning", template: "Use structured steps to solve: {program_task}", inputVars: ["program_task"], description: "Employs structured reasoning for code generation." },
-  { promptTypeId: "PT023", name: "Logical Chain-of-Thought", category: "Reasoning", template: "Apply logical reasoning to: {logic_problem}", inputVars: ["logic_problem"], description: "Incorporates logical principles into reasoning." },
-];
+const FALLBACK_PROMPT_TYPES = Object.entries(promptCatalog).map(([name, value], index) => ({
+  promptTypeId: `PT${String(index + 1).padStart(3, "0")}`,
+  name,
+  category: "General",
+  template: value.template,
+  inputVars: value.input_vars,
+  description: name,
+}));
 
 async function queryWithTimeout<T>(fn: () => Promise<T>, timeoutMs: number = 5000): Promise<T> {
   return Promise.race([
@@ -67,7 +62,7 @@ export async function GET() {
 
   let models: any[] = [];
   let taskTypes: string[] = [];
-  let personas = FALLBACK_PERSONAS;
+  let personas: string[] = PERSONA_NAMES;
   let prompts: any[] = [];
   let promptTypes = FALLBACK_PROMPT_TYPES;
   let source = "bigquery";
@@ -161,8 +156,7 @@ export async function GET() {
       systemPrompt: p.systemPrompt ? String(p.systemPrompt) : undefined,
     })).filter((p: any) => p.promptId);
 
-    const bqPersonas = Array.from(new Set(prompts.map((p: any) => p.persona).filter(Boolean)));
-    personas = bqPersonas.length > 0 ? [...new Set([...bqPersonas, ...FALLBACK_PERSONAS])] : FALLBACK_PERSONAS;
+    personas = PERSONA_NAMES;
 
     promptTypes = promptTypeRows.map((pt: any) => ({
       promptTypeId: String(pt.prompt_type_id ?? ""),
@@ -172,6 +166,7 @@ export async function GET() {
       inputVars: pt.input_vars ?? [],
       description: String(pt.description ?? ""),
     })).filter((pt: any) => pt.promptTypeId);
+    if (promptTypes.length === 0) promptTypes = FALLBACK_PROMPT_TYPES;
 
     if (errors.length > 0) source = "fallback";
   } catch (error: any) {
