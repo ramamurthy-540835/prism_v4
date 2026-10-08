@@ -602,6 +602,9 @@ export default function WorkbenchPage() {
                 </div>
 
                 {/* Metrics */}
+                {d.modelRouterEvidence && <div style={{ ...cardStyle, fontSize: 12, borderLeft: `4px solid ${personaConfig.color}` }}>
+                  <strong>Model Router Evidence</strong> · {d.modelRouterEvidence.rule} · {d.modelRouterEvidence.model} · {d.modelRouterEvidence.fallbackReason || d.modelRouterEvidence.reason}
+                </div>}
                 <div style={{
                   display: "grid",
                   gridTemplateColumns: "repeat(4, 1fr)",

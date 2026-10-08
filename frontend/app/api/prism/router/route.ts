@@ -17,7 +17,7 @@ export async function POST(req: Request) {
       promptId,
       promptVersion,
       userMessage = "",
-      maxTokens = 1024,
+      maxTokens,
       requestedModelId,
     } = body;
 
@@ -56,7 +56,7 @@ export async function POST(req: Request) {
     }
 
     // 5. Resolve model from BigQuery routing rules
-    const route = await resolveModel({ planId, taskType, requestedModelId });
+    const route = await resolveModel({ planId, persona, taskType, requestedModelId });
 
     // 6. Call model
     const modelResult = await callModel({
@@ -65,6 +65,8 @@ export async function POST(req: Request) {
       systemPrompt,
       userMessage,
       maxTokens: maxTokens ?? route.maxTokens,
+      costPerInputToken: route.costPerInputToken,
+      costPerOutputToken: route.costPerOutputToken,
     });
 
     const outputViolation = safetyViolation(modelResult.responseText || "");
@@ -85,7 +87,7 @@ export async function POST(req: Request) {
       estimatedCostUsd: modelResult.estimatedCostUsd,
       actualCostUsd: modelResult.actualCostUsd,
       decision: ossaResult.decision,
-      reason: ossaResult.reason,
+      reason: `${ossaResult.reason} Router: ${route.ruleKey}; ${route.reason}; ${route.fallbackReason}`,
       latencyMs: modelResult.latencyMs,
       taskType, planId, status: modelResult.status,
     });
@@ -96,6 +98,7 @@ export async function POST(req: Request) {
       reason: ossaResult.reason,
       provider: modelResult.provider,
       modelId: modelResult.modelId,
+      modelRouterEvidence: { rule: route.ruleKey, model: modelResult.modelId, reason: route.reason, fallbackReason: route.fallbackReason },
       inputTokens: modelResult.inputTokens,
       outputTokens: modelResult.outputTokens,
       costUsd: modelResult.actualCostUsd,

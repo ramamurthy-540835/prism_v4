@@ -86,7 +86,7 @@ export async function POST(req: Request) {
     const managedPrompt = await getPromptTemplate(body.promptId, body.promptVersion);
     const systemPrompt = managedPrompt?.systemPrompt ?? body.systemPrompt;
 
-    const route = await getRoute({ orgId: body.orgId, planId: body.planId, taskType: body.taskType });
+    const route = await getRoute({ orgId: body.orgId, planId: body.planId, persona: body.persona, taskType: body.taskType });
     const estimatedInputTokens = estimateTokens(`${systemPrompt ?? ""}\n${body.userMessage ?? ""}`);
     const ossa = await ossaGuard({ orgId: body.orgId, userId: body.userId, estimatedTokens: estimatedInputTokens, estimatedCostUsd: route.costPerInputToken * estimatedInputTokens, userMessage: body.userMessage });
 
