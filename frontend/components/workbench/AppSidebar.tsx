@@ -3,7 +3,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   LayoutDashboard, Wrench, BookOpen, FileText, DollarSign,
-  BarChart2, ScrollText, Settings, Home, Tag, FolderOpen,
+  BarChart2, ScrollText, Settings, Home, Tag, FolderOpen, LifeBuoy,
 } from "lucide-react";
 
 const NAV_ITEMS = [
@@ -16,6 +16,7 @@ const NAV_ITEMS = [
   { label: "Budgets",          href: "/admin/prism/budgets",     icon: DollarSign },
   { label: "Usage Analytics",  href: "/admin/prism/usage",       icon: BarChart2 },
   { label: "Audit Logs",       href: "/admin/prism/audit",       icon: ScrollText },
+  { label: "Support",          href: "/admin/prism/support",     icon: LifeBuoy },
   { label: "Settings",         href: "/admin/prism/settings",    icon: Settings },
 ];
 
