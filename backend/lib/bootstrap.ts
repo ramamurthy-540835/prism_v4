@@ -15,6 +15,8 @@ async function migrate() {
   const table = (name: string) => `\`${env.projectId}.${env.dataset}.${name}\``;
   await queryBigQuery(`CREATE TABLE IF NOT EXISTS ${table("users")}
     (id STRING, email STRING, password_hash STRING, name STRING, role STRING, org_id STRING, created_at TIMESTAMP)`);
+  await queryBigQuery(`ALTER TABLE ${table("users")} ADD COLUMN IF NOT EXISTS is_test_user BOOL`);
+  await queryBigQuery(`ALTER TABLE ${table("users")} ADD COLUMN IF NOT EXISTS active BOOL`);
   await queryBigQuery(`CREATE TABLE IF NOT EXISTS ${table("approval_gates")}
     (id STRING, org_id STRING, project_id STRING, kind STRING, requested_by STRING, status STRING, created_at TIMESTAMP, decided_by STRING, decided_at TIMESTAMP)`);
   await queryBigQuery(`CREATE TABLE IF NOT EXISTS ${table("project_members")}

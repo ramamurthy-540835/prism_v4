@@ -31,9 +31,9 @@ export async function POST(req: Request) {
     await ensureSeeded();
     const projectRows = await queryBigQuery<any>(`SELECT id,slug FROM \`${env.projectId}.${env.dataset}.projects\` p
       WHERE id=@projectId AND org_id=@orgId AND (approval_status='approved' OR approval_status IS NULL)
-      AND (visibility='public' OR owner_id=@userId OR @isAdmin OR EXISTS (
-        SELECT 1 FROM \`${env.projectId}.${env.dataset}.project_members\` m WHERE m.project_id=p.id AND m.user_id=@userId)) LIMIT 1`,
-      { projectId, orgId, userId, isAdmin: role === "admin" });
+      AND (visibility='public' OR owner_id=@principalId OR @isAdmin OR EXISTS (
+        SELECT 1 FROM \`${env.projectId}.${env.dataset}.project_members\` m WHERE m.project_id=p.id AND m.user_id=@principalId)) LIMIT 1`,
+      { projectId, orgId, principalId: session.id, isAdmin: role === "admin" });
     if (!projectRows[0]) return NextResponse.json({ error: { message: "Project is unavailable or awaiting approval" } }, { status: 403 });
     const runId = randomUUID();
 

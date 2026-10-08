@@ -19,3 +19,12 @@ test("signed sessions reject tampering", () => {
     assert.equal(exports.getSession(new Request("http://localhost", { headers: { cookie: `prism_session=${token}x` } })), null);
   } finally { if (old === undefined) delete process.env.PRISM_SESSION_SECRET; else process.env.PRISM_SESSION_SECRET = old; }
 });
+
+test("test-user passwords are salted and reject wrong passwords", () => {
+  const first = exports.hashPassword("temporary-secret");
+  const second = exports.hashPassword("temporary-secret");
+  assert.notEqual(first, second);
+  assert.equal(exports.verifyPassword("temporary-secret", first), true);
+  assert.equal(exports.verifyPassword("wrong-secret", first), false);
+  assert.equal(exports.verifyPassword("temporary-secret", "invalid"), false);
+});

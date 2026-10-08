@@ -1,4 +1,4 @@
-import { createHmac, timingSafeEqual } from "crypto";
+import { createHmac, randomBytes, scryptSync, timingSafeEqual } from "crypto";
 
 export type SessionUser = { id: string; email: string; role: "admin" | "member"; orgId: string };
 const cookieName = "prism_session";
@@ -27,3 +27,18 @@ export function getSession(req: Request): SessionUser | null {
 }
 
 export const sessionCookie = cookieName;
+
+export function hashPassword(password: string) {
+  const salt = randomBytes(16).toString("hex");
+  return `scrypt$${salt}$${scryptSync(password, salt, 64).toString("hex")}`;
+}
+
+export function verifyPassword(password: string, stored: string) {
+  const [method, salt, hex] = stored.split("$");
+  if (method !== "scrypt" || !salt || !hex) return false;
+  try {
+    const expected = Buffer.from(hex, "hex");
+    const actual = scryptSync(password, salt, expected.length);
+    return expected.length === 64 && timingSafeEqual(actual, expected);
+  } catch { return false; }
+}
