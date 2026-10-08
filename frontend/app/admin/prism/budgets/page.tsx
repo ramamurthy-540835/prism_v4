@@ -17,6 +17,7 @@ export default function BudgetsPage() {
   }, []);
 
   const columns = budgets.length ? Object.keys(budgets[0]) : [];
+  const label = (column: string) => ({ monthlySpendLimitUsd: "Monthly warning threshold (USD)", monthlyTokenLimit: "Monthly token warning", hardStop: "Safety stop" } as Record<string, string>)[column] || column.replace(/([A-Z])/g, " $1");
 
   return (
     <div className="min-h-screen bg-white text-[#161616]" style={{ fontFamily: "'IBM Plex Sans', Inter, sans-serif" }}>
@@ -42,7 +43,7 @@ export default function BudgetsPage() {
                 <thead>
                   <tr className="border-b border-[#dcdcdc]">
                     {columns.map((c) => (
-                      <th key={c} className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-[#525252]">{c}</th>
+                      <th key={c} className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-[#525252]">{label(c)}</th>
                     ))}
                   </tr>
                 </thead>

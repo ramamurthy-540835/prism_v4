@@ -12,16 +12,37 @@ function modelFor(task: string) {
 }
 
 async function migrate() {
+  const table = (name: string) => `\`${env.projectId}.${env.dataset}.${name}\``;
+  await queryBigQuery(`CREATE TABLE IF NOT EXISTS ${table("users")}
+    (id STRING, email STRING, password_hash STRING, name STRING, role STRING, org_id STRING, created_at TIMESTAMP)`);
+  await queryBigQuery(`CREATE TABLE IF NOT EXISTS ${table("approval_gates")}
+    (id STRING, org_id STRING, project_id STRING, kind STRING, requested_by STRING, status STRING, created_at TIMESTAMP, decided_by STRING, decided_at TIMESTAMP)`);
+  await queryBigQuery(`CREATE TABLE IF NOT EXISTS ${table("project_members")}
+    (project_id STRING, user_id STRING, org_id STRING, created_at TIMESTAMP)`);
+  await queryBigQuery(`CREATE TABLE IF NOT EXISTS ${table("execution_logs")}
+    (run_id STRING, event_ts TIMESTAMP, tenant STRING, project_id STRING, user_id STRING, persona STRING, task_type STRING,
+     prompt_type_id STRING, model_id STRING, provider STRING, route_rule STRING, route_reason STRING, fallback_reason STRING,
+     status STRING, input_tokens INT64, output_tokens INT64, cost_usd FLOAT64, artifact_path STRING)`);
+  await queryBigQuery(`CREATE TABLE IF NOT EXISTS ${table("support_tickets")}
+    (id STRING, event_ts TIMESTAMP, tenant STRING, user_id STRING, subject STRING, message STRING, status STRING)`);
+  await queryBigQuery(`ALTER TABLE ${table("projects")} ADD COLUMN IF NOT EXISTS domain_tag STRING`);
+  await queryBigQuery(`ALTER TABLE ${table("projects")} ADD COLUMN IF NOT EXISTS approval_status STRING`);
+  await queryBigQuery(`ALTER TABLE ${table("prism_plans")} ADD COLUMN IF NOT EXISTS monthlyBaseInr FLOAT64`);
+  await queryBigQuery(`ALTER TABLE ${table("prism_plans")} ADD COLUMN IF NOT EXISTS billingMode STRING`);
+  await queryBigQuery(`MERGE ${table("organizations")} T USING (SELECT 'naturelabs' AS id, 'Nature Labs' AS name, 'naturelabs' AS slug) S
+    ON T.slug=S.slug WHEN NOT MATCHED THEN INSERT (id,name,slug,created_at) VALUES (S.id,S.name,S.slug,CURRENT_TIMESTAMP())`);
   const plans = [
-    { id: "starter", name: "Starter", description: "Postpaid · ₹199 monthly base plus metered usage", tokens: 2_000_000 },
-    { id: "team", name: "Team", description: "Postpaid monthly base plus metered usage", tokens: 10_000_000 },
-    { id: "enterprise", name: "Enterprise", description: "Postpaid monthly base plus metered usage", tokens: 999_999_999 },
+    { id: "starter", name: "Starter", description: "Postpaid · ₹199 monthly base plus metered usage", tokens: 2_000_000, base: 199 },
+    { id: "team", name: "Team", description: "Postpaid monthly base plus metered usage", tokens: 10_000_000, base: null },
+    { id: "enterprise", name: "Enterprise", description: "Postpaid monthly base plus metered usage", tokens: 999_999_999, base: null },
   ];
-  const planSource = plans.map((p) => `SELECT ${quote(p.id)} AS planId, ${quote(p.name)} AS name, ${quote(p.description)} AS description, ${p.tokens} AS monthlyTokenLimit`).join(" UNION ALL ");
+  const planSource = plans.map((p) => `SELECT ${quote(p.id)} AS planId, ${quote(p.name)} AS name, ${quote(p.description)} AS description, ${p.tokens} AS monthlyTokenLimit, ${p.base === null ? "CAST(NULL AS FLOAT64)" : p.base} AS monthlyBaseInr`).join(" UNION ALL ");
   await queryBigQuery(`MERGE \`${env.projectId}.${env.dataset}.${env.plansTable}\` T USING (${planSource}) S ON T.planId = S.planId
-    WHEN MATCHED THEN UPDATE SET name=S.name, description=S.description, status='active', updatedAt=CURRENT_TIMESTAMP()
-    WHEN NOT MATCHED THEN INSERT (planId,name,description,monthlyTokenLimit,monthlySpendLimitUsd,status,createdAt,updatedAt)
-      VALUES (S.planId,S.name,S.description,S.monthlyTokenLimit,0,'active',CURRENT_TIMESTAMP(),CURRENT_TIMESTAMP())`);
+    WHEN MATCHED THEN UPDATE SET name=S.name, description=S.description, monthlyBaseInr=S.monthlyBaseInr, billingMode='postpaid', status='active', updatedAt=CURRENT_TIMESTAMP()
+    WHEN NOT MATCHED THEN INSERT (planId,name,description,monthlyTokenLimit,monthlySpendLimitUsd,monthlyBaseInr,billingMode,status,createdAt,updatedAt)
+      VALUES (S.planId,S.name,S.description,S.monthlyTokenLimit,0,S.monthlyBaseInr,'postpaid','active',CURRENT_TIMESTAMP(),CURRENT_TIMESTAMP())`);
+  await queryBigQuery(`UPDATE \`${env.projectId}.${env.dataset}.${env.plansTable}\` SET status='retired',updatedAt=CURRENT_TIMESTAMP()
+    WHERE planId IN ('community','student') AND status!='retired'`);
 
   const routes = PERSONA_NAMES.flatMap((persona) => PERSONAS[persona].tasks.map((task) => {
     const choice = modelFor(task);

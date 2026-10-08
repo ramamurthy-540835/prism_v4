@@ -60,6 +60,7 @@ export default function WorkbenchPage() {
   const [result, setResult] = useState<any>(null);
   const [quickOpen, setQuickOpen] = useState(true);
   const [copied, setCopied] = useState(false);
+  const [projects, setProjects] = useState<any[]>([]);
 
   const [form, setForm] = useState({
     userId: "",
@@ -72,7 +73,8 @@ export default function WorkbenchPage() {
     systemPrompt: "",
     userMessage: "",
     maxTokens: taskTokenDefault(PERSONAS[DEFAULT_PERSONA].tasks[0]),
-    requestedModelId: ""
+    requestedModelId: "",
+    projectId: ""
   });
 
   useEffect(() => {
@@ -109,6 +111,16 @@ export default function WorkbenchPage() {
       .catch((e) => {
         setOptionsError(e instanceof Error ? e.message : "Failed to load options");
       });
+    fetch("/api/prism/auth").then((r) => r.json()).then((data) => {
+      if (data.user) setForm((f) => ({ ...f, userId: data.user.email, orgId: data.user.orgId, role: data.user.role }));
+    });
+    fetch("/api/prism/projects").then((r) => r.json()).then((rows) => {
+      if (Array.isArray(rows)) {
+        const approved = rows.filter((p) => !p.approval_status || p.approval_status === "approved");
+        setProjects(approved);
+        if (approved[0]) setForm((f) => ({ ...f, projectId: approved[0].id }));
+      }
+    });
   }, []);
 
   const personaConfig = PERSONAS[isPersona(form.persona) ? form.persona : DEFAULT_PERSONA];
@@ -416,9 +428,16 @@ export default function WorkbenchPage() {
 
             {/* Identity & Plan */}
             <div style={cardStyle}>
+              <label style={labelStyle}>Project</label>
+              <select style={commonInputStyle as any} value={form.projectId} onChange={(e) => setForm((f) => ({ ...f, projectId: e.target.value }))}>
+                {projects.length === 0 && <option value="">Create and approve a project first</option>}
+                {projects.map((p) => <option key={p.id} value={p.id}>{p.name} · {p.domain_tag || "Other"}</option>)}
+              </select>
+            </div>
+            <div style={cardStyle}>
               <h3 style={{ fontSize: "11px", fontWeight: 600, textTransform: "uppercase", color: "#525252", margin: "0 0 12px 0", letterSpacing: "0.04em" }}>Identity Plan</h3>
               <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
-                {[form.userId, form.orgId, form.role, "enterprise"].map((v) => (
+                {[form.userId || "Sign in required", "Nature Labs", form.role, "Starter"].map((v) => (
                   <span key={v} style={{
                     padding: "6px 12px",
                     borderRadius: "16px",
@@ -436,7 +455,7 @@ export default function WorkbenchPage() {
             {/* Run Button */}
             <button
               onClick={run}
-              disabled={loading || !form.userMessage.trim()}
+              disabled={loading || !form.userMessage.trim() || !form.projectId || !form.userId}
               style={{
                 width: "100%",
                 padding: "12px 16px",
@@ -605,6 +624,7 @@ export default function WorkbenchPage() {
                 {d.modelRouterEvidence && <div style={{ ...cardStyle, fontSize: 12, borderLeft: `4px solid ${personaConfig.color}` }}>
                   <strong>Model Router Evidence</strong> · {d.modelRouterEvidence.rule} · {d.modelRouterEvidence.model} · {d.modelRouterEvidence.fallbackReason || d.modelRouterEvidence.reason}
                 </div>}
+                {d.artifactUrl && <p style={{ marginBottom: 16 }}><a href={d.artifactUrl} target="_blank" rel="noreferrer" style={{ color: "#0f62fe", fontWeight: 600 }}>Download artifact</a></p>}
                 <div style={{
                   display: "grid",
                   gridTemplateColumns: "repeat(4, 1fr)",

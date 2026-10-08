@@ -6,60 +6,14 @@ import WorkbenchHeader from "@/components/workbench/WorkbenchHeader";
 export default function PlansPage() {
   const [plans, setPlans] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-
-  useEffect(() => {
-    fetch("/api/prism/plans")
-      .then((r) => r.json())
-      .then((d) => setPlans(Array.isArray(d) ? d : []))
-      .catch((e) => setError(String(e?.message ?? e)))
-      .finally(() => setLoading(false));
-  }, []);
-
-  const columns = plans.length ? Object.keys(plans[0]) : [];
-
-  return (
-    <div className="min-h-screen bg-white text-[#161616]" style={{ fontFamily: "'IBM Plex Sans', Inter, sans-serif" }}>
-      <WorkbenchHeader />
-      <div className="flex">
-        <AppSidebar />
-        <main className="flex-1 bg-[#f8faff] p-6 space-y-4">
-          <div className="ibm-panel p-5 flex items-center justify-between">
-            <div>
-              <h1 className="text-xl font-semibold text-[#161616]">Plans</h1>
-              <p className="text-sm text-[#525252] mt-1">Active postpaid plans.</p>
-            </div>
-          </div>
-
-          {error && <div className="rounded border border-[#da1e28] bg-white p-3 text-sm text-[#da1e28]">{error}</div>}
-          {loading ? (
-            <div className="ibm-panel p-6 text-[#525252] text-sm">Loading plans...</div>
-          ) : plans.length === 0 ? (
-            <div className="ibm-panel p-6 text-[#525252] text-sm">No active plans found in <code>prism_plans</code>.</div>
-          ) : (
-            <div className="ibm-panel p-0 overflow-auto">
-              <table className="min-w-full text-sm">
-                <thead>
-                  <tr className="border-b border-[#dcdcdc]">
-                    {columns.map((c) => (
-                      <th key={c} className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-[#525252]">{c}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {plans.map((row, i) => (
-                    <tr key={i} className="border-b border-[#dcdcdc] hover:bg-[#f4f7fb]">
-                      {columns.map((c) => (
-                        <td key={c} className="px-4 py-3 text-[#161616]">{String(row[c] ?? "—")}</td>
-                      ))}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </main>
-      </div>
-    </div>
-  );
+  useEffect(() => { fetch("/api/prism/plans").then((r) => r.json()).then((rows) => setPlans(Array.isArray(rows) ? rows : [])).finally(() => setLoading(false)); }, []);
+  return <div className="min-h-screen bg-white text-[#161616]"><WorkbenchHeader /><div className="flex"><AppSidebar />
+    <main className="flex-1 bg-[#f8faff] p-6 space-y-5"><h1 className="text-2xl font-semibold">Postpaid plans</h1>
+      {loading ? <p>Loading plans...</p> : plans.length === 0 ? <p>No active plans available.</p> : <div className="grid md:grid-cols-3 gap-4">{plans.map((plan) =>
+        <section key={plan.planId} className="ibm-panel p-6"><h2 className="text-xl font-semibold">{plan.name}</h2>
+          <p className="mt-3 text-2xl font-bold">{plan.monthlyBaseInr != null ? `₹${Number(plan.monthlyBaseInr).toFixed(0)} / month base` : "Contact sales"}</p>
+          <p className="mt-2 text-sm text-[#525252]">+ metered governed usage, billed monthly in arrears</p>
+          <p className="mt-4 text-sm">{plan.description}</p>
+        </section>)}</div>}
+    </main></div></div>;
 }

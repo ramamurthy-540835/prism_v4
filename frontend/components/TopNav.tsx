@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
 const NAV_LINKS = [
   { label: "Home", href: "/" },
@@ -13,6 +14,8 @@ const NAV_LINKS = [
 
 export default function TopNav() {
   const pathname = usePathname();
+  const [email, setEmail] = useState("");
+  useEffect(() => { fetch("/api/prism/auth").then((r) => r.json()).then((data) => setEmail(data.user?.email || "")); }, []);
 
   const isActive = (href: string) => {
     if (href === "/") return pathname === "/";
@@ -58,17 +61,11 @@ export default function TopNav() {
 
       {/* Right — badges + future login */}
       <div className="flex items-center gap-2 shrink-0">
-        <span className="rounded border border-[#dcdcdc] bg-[#f4f7fb] px-2.5 py-1 text-xs text-[#525252]">DEV</span>
+        <span className="rounded border border-[#dcdcdc] bg-[#f4f7fb] px-2.5 py-1 text-xs text-[#525252]">{process.env.NEXT_PUBLIC_PRISM_ENV || "Production"}</span>
         <span className="rounded border border-[#dcdcdc] bg-white px-2.5 py-1 text-xs text-[#525252] hidden sm:block">
-          test@mastechdigital.com
+          {email || "Guest"}
         </span>
-        <button
-          title="Authentication coming in next release"
-          disabled
-          className="rounded border border-[#dcdcdc] bg-white px-3 py-1.5 text-xs text-[#525252] opacity-50 cursor-not-allowed hidden md:block"
-        >
-          Login
-        </button>
+        {!email && <Link href="/login" className="rounded border border-[#dcdcdc] bg-white px-3 py-1.5 text-xs text-[#525252] hidden md:block">Sign in</Link>}
       </div>
     </header>
   );

@@ -3,12 +3,13 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   LayoutDashboard, Wrench, BookOpen, FileText, DollarSign,
-  BarChart2, ScrollText, Settings, Home, Tag,
+  BarChart2, ScrollText, Settings, Home, Tag, FolderOpen,
 } from "lucide-react";
 
 const NAV_ITEMS = [
   { label: "Admin Dashboard",  href: "/admin/prism",             icon: LayoutDashboard },
   { label: "Workbench",        href: "/admin/prism/workbench",   icon: Wrench },
+  { label: "Projects",         href: "/admin/prism/projects",    icon: FolderOpen },
   { label: "Prompt Library",   href: "/admin/prism/prompts",     icon: BookOpen },
   { label: "Plans",            href: "/admin/prism/plans",       icon: FileText },
   { label: "Pricing",          href: "/pricing",                 icon: Tag },

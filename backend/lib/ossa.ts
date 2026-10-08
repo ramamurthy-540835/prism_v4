@@ -12,7 +12,6 @@ export async function ossaGuard({ orgId = "naturelabs", userId = "", estimatedTo
 }) {
   const violation = safetyViolation(userMessage);
   if (violation) {
-    await insertUsage({ orgId, userId, status: "blocked", reason: `safety_violation: ${violation}`, sourceApp: "prism" });
     return { decision: "stop", reason: violation };
   }
 

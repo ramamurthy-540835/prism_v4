@@ -198,7 +198,7 @@ export default function AdminPage() {
 
   const loadData = useCallback(async () => {
     setLoading(true);
-    const [healthRes, summaryRes, plansRes, topUsersRes, dailyRes, routingRes, promptTypesRes, budgetsRes, columnsRes] =
+    const [healthRes, summaryRes, plansRes, topUsersRes, dailyRes, routingRes, promptTypesRes, budgetsRes, columnsRes, approvalsRes] =
       await Promise.allSettled([
         fetch("/api/prism/health").then((r) => r.json()),
         fetch("/api/prism/summary").then((r) => r.json()),
@@ -209,6 +209,7 @@ export default function AdminPage() {
         fetch("/api/prism/prompt-types").then((r) => r.json()),
         fetch("/api/prism/budgets").then((r) => r.json()),
         fetch("/api/prism/plans/columns").then((r) => r.json()),
+        fetch("/api/prism/approvals").then((r) => r.json()),
       ]);
 
     setHealth(healthRes.status === "fulfilled" ? healthRes.value : { status: "error", message: "Health check failed" });
@@ -228,6 +229,7 @@ export default function AdminPage() {
       routing:     routingRes.status === "fulfilled" && Array.isArray(routingRes.value) ? routingRes.value : [],
       promptTypes: asArr(promptTypesRes),
       budgets:     asArr(budgetsRes),
+      approvals:   asArr(approvalsRes),
     });
     setLastUpdated(new Date());
     setLoading(false);
@@ -244,6 +246,12 @@ export default function AdminPage() {
   const routing   = data.routing   ?? [];
   const promptTypes = data.promptTypes ?? [];
   const budgets   = data.budgets   ?? [];
+  const approvals = data.approvals ?? [];
+
+  const decideProject = async (gateId: string, decision: "approved" | "rejected") => {
+    await fetch("/api/prism/approvals", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ gateId, decision }) });
+    await loadData();
+  };
 
   const rawByDay: Record<string, any> = {};
   for (const r of daily as any[]) {
@@ -366,7 +374,7 @@ export default function AdminPage() {
                     {Number(summary.governed_calls ?? 0) > 0 && summary.total_spend != null
                       ? `₹${(Number(summary.total_spend) * Number(summary.display_rate_inr ?? 97.05)).toFixed(2)}` : "—"}
                   </div>
-                  <div style={{ fontSize: 12, color: "#8d8d8d", marginTop: 2 }}>{Number(summary.governed_calls ?? 0) > 0 ? `${fmtUsd(Number(summary.total_spend))} USD · estimated INR · month to date` : "No governed calls yet this month"}</div>
+                  <div style={{ fontSize: 12, color: "#8d8d8d", marginTop: 2 }}>{summary.error ? "Spend data unavailable" : Number(summary.governed_calls ?? 0) > 0 ? `${fmtUsd(Number(summary.total_spend))} USD · estimated INR · month to date` : "No governed calls yet this month"}</div>
                 </div>
               </div>
 
@@ -417,6 +425,13 @@ export default function AdminPage() {
                 </div>
               </div>
             </div>
+
+            {approvals.length > 0 && <Card><SectionHeader title="Project approvals" badge={approvals.length} />
+              <div style={{ display: "grid", gap: 10 }}>{approvals.map((gate: any) => <div key={gate.id} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
+                <span>{gate.project_name} · {gate.domain_tag} · requested by {gate.requested_by}</span>
+                <span><button onClick={() => decideProject(gate.id, "approved")} className="ibm-btn-primary px-3 py-1">Approve</button>{" "}<button onClick={() => decideProject(gate.id, "rejected")} className="ibm-btn-secondary px-3 py-1">Reject</button></span>
+              </div>)}</div>
+            </Card>}
 
             {/* Row 2: 60/40 split */}
             <div style={{ display: "grid", gridTemplateColumns: "3fr 2fr", gap: 20, alignItems: "start" }}>
@@ -547,7 +562,7 @@ export default function AdminPage() {
                                       <span style={{ marginLeft: 4, fontSize: 10, color: "#0f62fe" }}>★</span>
                                     )}
                                   </Td>
-                                  <Td>{id === "starter" ? "₹199" : "Contact sales"}</Td>
+                                  <Td>{p.monthlyBaseInr != null ? `₹${Number(p.monthlyBaseInr).toFixed(0)}` : "Contact sales"}</Td>
                                   <Td>Postpaid + usage</Td>
                                   <Td>{fmtTokens(tokens)}</Td>
                                   <Td>
