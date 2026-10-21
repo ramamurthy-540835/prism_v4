@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { queryBigQuery } from "@backend/lib/bigquery";
 import { env } from "@backend/lib/env";
 
+export const dynamic = "force-dynamic";
+
 export async function GET() {
   try {
     const rows = await queryBigQuery(`

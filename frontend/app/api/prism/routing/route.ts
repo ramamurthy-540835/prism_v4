@@ -4,6 +4,8 @@ import { ensureSeeded } from "@backend/lib/bootstrap";
 import { queryBigQuery } from "@backend/lib/bigquery";
 import { activeWhereClause, getActiveColumn } from "@backend/lib/schema";
 
+export const dynamic = "force-dynamic";
+
 let _routingCache: any = null;
 let _routingCachedAt = 0;
 const ROUTING_TTL = 5 * 60 * 1000;

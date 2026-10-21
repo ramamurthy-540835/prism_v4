@@ -139,6 +139,19 @@ export async function GET() {
       }))
       .filter((m: any) => m.modelId);
 
+    // Available as an explicit choice for complex work without changing plan defaults.
+    const argonTasks = new Set([
+      "adr", "agent_design", "architecture_design", "automation_script", "bug_fix",
+      "code_generation", "code_review", "data_analysis", "evaluation_plan",
+      "fine_tuning_plan", "gap_analysis", "integration_design", "rag_pipeline",
+      "refactoring", "research", "requirements", "requirements_analysis", "solution_document",
+    ]);
+    for (const taskType of new Set(models.map((m: any) => m.taskType))) {
+      if (argonTasks.has(taskType) && !models.some((m: any) => m.taskType === taskType && m.modelId === "gemini-4-argon")) {
+        models.push({ modelId: "gemini-4-argon", provider: "vertex", taskType });
+      }
+    }
+
     taskTypes = Array.from(new Set(models.map((m: any) => m.taskType).filter(Boolean)));
 
     prompts = promptRows.map((p: any) => ({

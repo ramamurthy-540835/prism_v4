@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { queryBigQuery } from "@backend/lib/bigquery";
 import { env } from "@backend/lib/env";
 
+export const dynamic = "force-dynamic";
+
 let _promptTypesCache: any = null;
 let _promptTypesCachedAt = 0;
 const PROMPT_TYPES_TTL = 10 * 60 * 1000;

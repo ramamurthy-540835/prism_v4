@@ -1,0 +1,22 @@
+# PRISM v6 container build. Submitting this file builds and pushes an image;
+# deploying the image to Cloud Run is a separate, deliberate step.
+steps:
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - --network=cloudbuild
+      - --file
+      - Dockerfile
+      - --tag
+      - us-central1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/prism-frontend:v6-$BUILD_ID
+      - .
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - push
+      - us-central1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/prism-frontend:v6-$BUILD_ID
+
+images:
+  - us-central1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/prism-frontend:v6-$BUILD_ID
+
+options:
+  machineType: E2_HIGHCPU_8

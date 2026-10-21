@@ -307,7 +307,11 @@ export default function WorkbenchPage() {
               <div style={{ marginBottom: "20px" }}>
                 <label style={labelStyle}>Model</label>
                 <select value={form.requestedModelId}
-                  onChange={(e) => setForm((f) => ({ ...f, requestedModelId: e.target.value }))}
+                  onChange={(e) => {
+                    const requestedModelId = e.target.value;
+                    setForm((f) => ({ ...f, requestedModelId,
+                      maxTokens: requestedModelId === "gemini-4-argon" ? 32768 : taskTokenDefault(f.taskType) }));
+                  }}
                   style={commonInputStyle as any}>
                   <option value="">Auto (from routing rules)</option>
                   {filteredModels.map((m) => <option key={`${m.provider}:${m.modelId}`} value={m.modelId}>{m.modelId}</option>)}
@@ -317,7 +321,7 @@ export default function WorkbenchPage() {
               {/* Max Tokens */}
               <div style={{ marginBottom: "20px" }}>
                 <label style={labelStyle}>Max tokens: {form.maxTokens}</label>
-                <input type="range" min={256} max={8192} step={256} value={form.maxTokens}
+                <input type="range" min={256} max={form.requestedModelId === "gemini-4-argon" ? 65536 : 8192} step={256} value={form.maxTokens}
                   onChange={(e) => setForm((f) => ({ ...f, maxTokens: Number(e.target.value) }))}
                   style={{ width: "100%" }} />
               </div>

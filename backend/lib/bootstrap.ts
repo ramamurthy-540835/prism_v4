@@ -29,6 +29,16 @@ async function migrate() {
     (id STRING, event_ts TIMESTAMP, tenant STRING, user_id STRING, subject STRING, message STRING, status STRING)`);
   await queryBigQuery(`ALTER TABLE ${table("projects")} ADD COLUMN IF NOT EXISTS domain_tag STRING`);
   await queryBigQuery(`ALTER TABLE ${table("projects")} ADD COLUMN IF NOT EXISTS approval_status STRING`);
+  await queryBigQuery(`ALTER TABLE ${table("projects")} ADD COLUMN IF NOT EXISTS repository_url STRING`);
+  await queryBigQuery(`CREATE TABLE IF NOT EXISTS ${table("app_records")}
+    (id STRING, org_id STRING, owner_id STRING, app STRING, kind STRING, status STRING, title STRING,
+     payload_json STRING, created_at TIMESTAMP, updated_at TIMESTAMP)`);
+  await queryBigQuery(`CREATE TABLE IF NOT EXISTS ${table("iot_device_keys")}
+    (id STRING, org_id STRING, project_id STRING, device_id STRING, key_hash STRING, active BOOL, created_at TIMESTAMP, created_by STRING)`);
+  await queryBigQuery(`CREATE TABLE IF NOT EXISTS ${table("iot_readings")}
+    (id STRING, org_id STRING, project_id STRING, device_id STRING, plant_id STRING, line_id STRING,
+     observed_at TIMESTAMP, received_at TIMESTAMP, signals_json STRING)
+    PARTITION BY DATE(observed_at) CLUSTER BY org_id,project_id,plant_id`);
   await queryBigQuery(`ALTER TABLE ${table("prism_plans")} ADD COLUMN IF NOT EXISTS monthlyBaseInr FLOAT64`);
   await queryBigQuery(`ALTER TABLE ${table("prism_plans")} ADD COLUMN IF NOT EXISTS billingMode STRING`);
   await queryBigQuery(`MERGE ${table("organizations")} T USING (SELECT 'naturelabs' AS id, 'Nature Labs' AS name, 'naturelabs' AS slug) S

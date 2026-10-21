@@ -31,3 +31,12 @@ test("A pinned Gemini model overrides the rule", async () => {
   assert.equal(result.modelId, "gemini-2.5-flash");
   assert.match(result.reason, /User pinned/);
 });
+
+test("Gemini 4 Argon can be pinned on Vertex with its published token rates", async () => {
+  const result = await exports.resolveModel({ persona: "Developer", taskType: "code_generation", requestedModelId: "gemini-4-argon" });
+  assert.equal(result.modelId, "gemini-4-argon");
+  assert.equal(result.provider, "vertex");
+  const introductory = Date.now() < Date.UTC(2026, 11, 1);
+  assert.equal(result.costPerInputToken, (introductory ? 2 : 4) / 1_000_000);
+  assert.equal(result.costPerOutputToken, (introductory ? 10 : 20) / 1_000_000);
+});

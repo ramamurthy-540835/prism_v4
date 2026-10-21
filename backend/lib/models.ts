@@ -7,6 +7,17 @@ const RATES: Record<string, [number, number]> = {
   "claude-sonnet-4-6": [3 / 1_000_000, 15 / 1_000_000],
 };
 
+const ARGON_MODEL_ID = "gemini-4-argon";
+
+function ratesFor(modelId: string): [number, number] {
+  if (modelId === ARGON_MODEL_ID) {
+    // Google Cloud introductory pricing ends November 30, 2026.
+    const introductory = Date.now() < Date.UTC(2026, 11, 1);
+    return introductory ? [2 / 1_000_000, 10 / 1_000_000] : [4 / 1_000_000, 20 / 1_000_000];
+  }
+  return RATES[modelId] ?? [0, 0];
+}
+
 export async function resolveModel(input: { planId?: string; persona?: string; taskType?: string; requestedModelId?: string }) {
   const route = await getRoute(input);
   if (route.routingDecision !== "allow") throw new Error(route.reason);
@@ -21,7 +32,7 @@ export async function resolveModel(input: { planId?: string; persona?: string; t
   }
   return { provider, modelId, maxTokens: route.maxTokensPerCall,
     ruleKey: route.ruleKey, reason: pinned ? `User pinned ${input.requestedModelId}` : route.reason,
-    fallbackReason, costPerInputToken: RATES[modelId]?.[0] ?? 0, costPerOutputToken: RATES[modelId]?.[1] ?? 0 };
+    fallbackReason, costPerInputToken: ratesFor(modelId)[0], costPerOutputToken: ratesFor(modelId)[1] };
 }
 
 export async function callModel({ provider, modelId, systemPrompt = "", userMessage = "", maxTokens = 2048,
@@ -49,15 +60,20 @@ export async function callModel({ provider, modelId, systemPrompt = "", userMess
       outputTokens = Number(payload.usage?.output_tokens || 0);
     } else if (provider === "vertex") {
       const { VertexAI } = await import("@google-cloud/vertexai");
-      const vertex = new VertexAI({ project: env.projectId, location: process.env.VERTEX_AI_LOCATION || "us-central1" });
+      // Gemini 4 Argon is served from global/us/eu, not regional Vertex endpoints.
+      const location = modelId === ARGON_MODEL_ID ? "global" : process.env.VERTEX_AI_LOCATION || "us-central1";
+      const vertex = new VertexAI({ project: env.projectId, location });
       const response: any = await vertex.getGenerativeModel({ model: modelId }).generateContent({
         contents: [{ role: "user", parts: [{ text: `${systemPrompt}\n\n${userMessage}` }] }], generationConfig: { maxOutputTokens: maxTokens } });
       responseText = response.response?.candidates?.[0]?.content?.parts?.map((part: any) => part.text || "").join("") || "";
       inputTokens = Number(response.response?.usageMetadata?.promptTokenCount || Math.ceil(`${systemPrompt}\n${userMessage}`.length / 4));
-      outputTokens = Number(response.response?.usageMetadata?.candidatesTokenCount || Math.ceil(responseText.length / 4));
+      const usage = response.response?.usageMetadata;
+      outputTokens = Number(usage?.candidatesTokenCount ?? Math.ceil(responseText.length / 4))
+        + Number(usage?.thoughtsTokenCount ?? 0);
     } else throw new Error(`Unsupported model provider: ${provider}`);
-    const rateIn = costPerInputToken || RATES[modelId]?.[0] || 0;
-    const rateOut = costPerOutputToken || RATES[modelId]?.[1] || 0;
+    const [defaultRateIn, defaultRateOut] = ratesFor(modelId);
+    const rateIn = costPerInputToken || defaultRateIn;
+    const rateOut = costPerOutputToken || defaultRateOut;
     const costUsd = inputTokens * rateIn + outputTokens * rateOut;
     return { status: "success", provider, modelId, inputTokens, outputTokens, totalTokens: inputTokens + outputTokens,
       estimatedCostUsd: costUsd, actualCostUsd: costUsd, latencyMs: Date.now() - started, responseText };

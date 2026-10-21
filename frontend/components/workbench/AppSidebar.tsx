@@ -3,13 +3,17 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   LayoutDashboard, Wrench, BookOpen, FileText, DollarSign,
-  BarChart2, ScrollText, Settings, Home, Tag, FolderOpen, LifeBuoy,
+  BarChart2, ScrollText, Settings, Home, Tag, FolderOpen, LifeBuoy, ReceiptIndianRupee, CandlestickChart, Ship, Gavel,
 } from "lucide-react";
 
 const NAV_ITEMS = [
   { label: "Admin Dashboard",  href: "/admin/prism",             icon: LayoutDashboard },
   { label: "Workbench",        href: "/admin/prism/workbench",   icon: Wrench },
   { label: "Projects",         href: "/admin/prism/projects",    icon: FolderOpen },
+  { label: "Textile Exports",  href: "/admin/prism/textile-exports", icon: Ship },
+  { label: "Property Auctions", href: "/admin/prism/property-auctions", icon: Gavel },
+  { label: "Stock Exchange",   href: "/admin/prism/stock-exchange", icon: CandlestickChart },
+  { label: "Partner GST",      href: "/admin/prism/partners/gst", icon: ReceiptIndianRupee },
   { label: "Prompt Library",   href: "/admin/prism/prompts",     icon: BookOpen },
   { label: "Plans",            href: "/admin/prism/plans",       icon: FileText },
   { label: "Pricing",          href: "/pricing",                 icon: Tag },
