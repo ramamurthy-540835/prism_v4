@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { timingSafeEqual } from "crypto";
 import { createSession, getSession, sessionCookie, verifyPassword } from "@backend/lib/auth";
 import { ensureSeeded } from "@backend/lib/bootstrap";
 import { queryBigQuery } from "@backend/lib/bigquery";
@@ -15,9 +16,16 @@ export async function POST(req: Request) {
   const secret = process.env.DEMO_ADMIN_PASSWORD;
   const normalizedEmail = String(email || "").trim().toLowerCase();
   const suppliedPassword = String(password || "");
+  const propertyEmail = String(process.env.PROPERTY_AUCTIONS_EMAIL || "").trim().toLowerCase();
+  const propertyPassword = process.env.PROPERTY_AUCTIONS_PASSWORD || "";
   let user;
   if (secret && normalizedEmail === adminEmail.toLowerCase() && suppliedPassword === secret) {
     user = { id: adminEmail, email: adminEmail, role: "admin" as const, orgId: "naturelabs" };
+  } else if (propertyEmail && propertyPassword && normalizedEmail === propertyEmail) {
+    const actual = Buffer.from(suppliedPassword);
+    const expected = Buffer.from(propertyPassword);
+    if (actual.length === expected.length && timingSafeEqual(actual, expected))
+      user = { id: "property-auctions-member", email: propertyEmail, role: "member" as const, orgId: "naturelabs" };
   } else if (normalizedEmail && suppliedPassword) {
     await ensureSeeded();
     const rows = await queryBigQuery<{ id: string; email: string; role: string; org_id: string; password_hash: string }>(
